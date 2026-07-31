@@ -1,0 +1,245 @@
+/* Loose Ends — design tokens and base styles.
+   Ties back to elliotolson.com: Inter / Inter Tight, near-black on white,
+   one accent (#f86916) doing all the interactive signaling. */
+
+:root {
+  --bg: #ffffff;
+  --ink: #111111;
+  --text: #525252;
+  --line: #e6e6e6;
+  /* #f86916 stays exact — it's elliotolson.com's real accent, not ours to
+     retune. Scope, not shade, is the accessibility fix: buttons/thumbs/
+     focus rings/underlines only, never body text, never a large fill.
+     Button labels are white on this fill — 2.99:1, under the 4.5:1 a
+     small-text AA pass needs. Known and accepted (2026-07-31): Elliot
+     wants white, not ink, on buttons specifically — bold weight helps
+     perceived legibility even though it doesn't buy an official WCAG
+     exception at this text size. Everywhere else orange still stays out
+     of text color entirely (see link a:hover below) — this trade is
+     scoped to buttons only, not reopening the rule generally. */
+  --accent: #f86916;
+  --accent-hover: #df5607;
+  --accent-ink: #ffffff;
+
+  /* logo mark, sampled from Simly.webp (#3fbdac) — 2.3:1 on white, too low
+     for text there; use it on --bg-alt (6.6:1) or as a graphic mark, not
+     as body copy on the light surface. */
+  --teal: #3fbdac;
+
+  /* alt surface: a deliberate dark panel, not an auto dark-mode swap.
+     CFE5E6 on 12263F is 11.6:1 — verified, not guessed, after the last
+     contrast mistake. Apply both together via .surface-alt; don't mix
+     with the light-surface tokens. */
+  --bg-alt: #12263f;
+  --text-alt: #cfe5e6;
+
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius: 4px;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0 0 var(--space-4);
+}
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0; }
+
+p { margin: 0 0 var(--space-4); max-width: 60ch; }
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+/* text stays --ink on hover, not --accent — orange-on-white text is
+   2.99:1, under the 4.5:1 a link needs. The underline (decoration, not
+   text) is where the accent is allowed to do its job, so it intensifies
+   instead. */
+a:hover { text-decoration-color: var(--accent-hover); text-decoration-thickness: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.meta, .label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.label--inline {
+  display: inline;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+/* buttons */
+.button {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.button--solid { background: var(--accent); color: var(--accent-ink); }
+.button--solid:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.button--outline { background: transparent; color: var(--ink); }
+.button--outline:hover { background: var(--accent); color: var(--accent-ink); }
+
+/* control-rail preview — range slider, toggle, select.
+   Real controls get built when the parameter contract lands; this is just
+   the look, so it's settled before that work starts. */
+.control { margin-bottom: var(--space-5); max-width: 320px; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  margin: var(--space-3) 0;
+  background: var(--line);
+  border-radius: 999px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.toggle { display: inline-flex; align-items: center; gap: var(--space-3); cursor: pointer; }
+.toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.toggle-track {
+  width: 36px; height: 20px;
+  background: var(--line);
+  border-radius: 999px;
+  position: relative;
+  transition: background-color 150ms ease;
+  flex-shrink: 0;
+}
+.toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  transition: transform 150ms ease;
+}
+.toggle input:checked + .toggle-track { background: var(--accent); }
+.toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+.toggle input:focus-visible + .toggle-track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+select {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+
+.swatch {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 120px;
+}
+.swatch-color {
+  height: 64px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.swatch-color--bg { background: var(--bg); }
+.swatch-color--ink { background: var(--ink); }
+.swatch-color--text { background: var(--text); }
+.swatch-color--line { background: var(--line); }
+.swatch-color--accent { background: var(--accent); }
+.swatch-color--teal { background: var(--teal); }
+.swatch-color--bg-alt { background: var(--bg-alt); }
+.swatch-color--text-alt { background: var(--text-alt); }
+
+/* deliberate dark panel — opt in per-element with this class, never via
+   prefers-color-scheme. See --bg-alt / --text-alt above. */
+.surface-alt {
+  background: var(--bg-alt);
+  color: var(--text-alt);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+}
+.surface-alt h1, .surface-alt h2, .surface-alt h3 {
+  color: var(--teal);
+}
+.surface-alt a { color: var(--text-alt); text-decoration-color: var(--teal); }
+.surface-alt a:hover { color: var(--teal); }
+.surface-alt .meta, .surface-alt .label { color: var(--text-alt); }
+
+.logo {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.mt-5 { margin-top: var(--space-5); }

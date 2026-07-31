@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loose Ends — style guide</title>
+  <link rel="icon" href="Simly.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    .wrap { max-width: 860px; margin: 0 auto; padding: var(--space-8) var(--space-5); }
+    section { margin-bottom: var(--space-8); }
+    .row { display: flex; flex-wrap: wrap; gap: var(--space-5); align-items: flex-start; }
+    .type-sample { border-top: 1px solid var(--line); padding-top: var(--space-4); margin-bottom: var(--space-4); }
+    hr { border: none; border-top: 1px solid var(--line); margin: var(--space-7) 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <section>
+      <img class="logo" src="Simly.webp" alt="Loose Ends">
+      <span class="meta">Loose Ends — style guide</span>
+      <h1>Every loose end,<br>the same frame.</h1>
+      <p>This page is a working reference, not a shipped route — it exists so
+      the shell's look is settled before the control rail gets built on top
+      of it.</p>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Type</h2>
+      <div class="type-sample"><h1>Aa — H1 / Inter Tight 900</h1></div>
+      <div class="type-sample"><h2>Aa — H2 / Inter Tight 900</h2></div>
+      <div class="type-sample"><h3>Aa — H3 / Inter Tight 700</h3></div>
+      <div class="type-sample">
+        <p>Body text runs in Inter at 16px/1.6, colored <code>var(--text)</code>
+        (#525252) rather than pure black — softer against long paragraphs.
+        <a href="#">A link uses the accent as its underline</a>, which
+        thickens on hover — the text itself stays ink, since accent-on-white
+        text falls under the contrast minimum.</p>
+      </div>
+      <div class="type-sample">
+        <span class="label">Label / meta — Inter Tight 600, uppercase, tracked</span>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Color</h2>
+      <p>Primary surface — this page.</p>
+      <div class="row">
+        <div class="swatch">
+          <div class="swatch-color swatch-color--bg"></div>
+          <span class="meta">bg #fff</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--ink"></div>
+          <span class="meta">ink #111</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--text"></div>
+          <span class="meta">text #525252</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--line"></div>
+          <span class="meta">line #e6e6e6</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--accent"></div>
+          <span class="meta">accent #f86916</span>
+        </div>
+      </div>
+      <p class="mt-5">Logo mark and the alt surface —
+      not for the light surface above, see the panel below.</p>
+      <div class="row">
+        <div class="swatch">
+          <div class="swatch-color swatch-color--teal"></div>
+          <span class="meta">teal #3fbdac</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--bg-alt"></div>
+          <span class="meta">bg-alt #12263f</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color swatch-color--text-alt"></div>
+          <span class="meta">text-alt #cfe5e6</span>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Alternate surface</h2>
+      <p>A deliberate dark panel — opted into per-element with
+      <code>.surface-alt</code>, never applied automatically by the browser
+      or OS. <code>#cfe5e6</code> on <code>#12263f</code> checks out at
+      11.6:1 contrast; the teal reads fine here (6.6:1) but stays off the
+      light surface above, where it only clears 2.3:1.</p>
+      <div class="surface-alt">
+        <span class="meta">Still Loose Ends</span>
+        <h3>Same shell, alternate surface</h3>
+        <p>Body copy in <code>--text-alt</code>, headings in
+        <code>--teal</code>, <a href="#">a link</a> using teal for its
+        underline and hover state.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Buttons</h2>
+      <div class="row">
+        <button type="button" class="button button--solid">Solid</button>
+        <button type="button" class="button button--outline">Outline</button>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>Controls</h2>
+      <p>A preview of the language the control rail will use — not the real
+      rail, just the look.</p>
+      <div class="row">
+        <div class="control">
+          <label class="label" for="demo-speed">Speed</label>
+          <input id="demo-speed" type="range" min="0" max="100" value="60">
+        </div>
+        <div class="control">
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-track"></span>
+            <span class="label label--inline">Reduced motion aware</span>
+          </label>
+        </div>
+        <div class="control">
+          <label class="label" for="demo-easing">Easing</label>
+          <select id="demo-easing">
+            <option>ease-out</option>
+            <option>ease-in-out</option>
+            <option>linear</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

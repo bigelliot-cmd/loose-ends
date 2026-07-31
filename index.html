@@ -4,8 +4,56 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Loose Ends</title>
+  <link rel="icon" href="Simly.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+    }
+    .hero {
+      max-width: 900px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(1.5rem, 4vw, 2.75rem);
+      line-height: 1.35;
+      letter-spacing: -0.005em;
+    }
+    .hero h1 .line {
+      display: block;
+    }
+    .hero-wink {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      margin-top: var(--space-7);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero h1 .line,
+      .hero-wink {
+        opacity: 0;
+        animation: fade-in 1200ms ease-out forwards;
+      }
+      .line-1 { animation-delay: 0ms; }
+      .line-2 { animation-delay: 600ms; }
+      .hero-wink { animation-delay: 1200ms; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
-<body style="background:#D2D4CB; color:#21231E; font-family:system-ui, sans-serif; display:grid; place-items:center; height:100vh; margin:0;">
-  <p>Loose Ends — pipeline test</p>
+<body>
+  <div class="hero">
+    <h1><span class="line line-1">We swore we tied up every loose end,</span><span class="line line-2">but you left our story running in an infinite loop. Turns out you can't just comment out the mess and pretend the code is clean.</span></h1>
+    <img class="hero-wink" src="Simly.webp" alt="" aria-hidden="true">
+  </div>
 </body>
 </html>

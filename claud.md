@@ -32,10 +32,11 @@ contents are allowed to be rough.
 One repo, one custom domain, projects as paths underneath.
 
 ```
-/                    the feed — every item, newest first
-/inspiration/        the effects gallery
-/inspiration/<slug>/ an individual effect
-/<project>/          any other project at its own path
+/                        the feed — every item, newest first
+/web-animations/         the effects gallery
+/web-animations/<slug>/  an individual effect
+/mar-dash/               the Mariners dashboard
+/<project>/              any other project at its own path
 ```
 
 Do not split projects into separate repos. One repo gets one custom domain;
@@ -43,6 +44,11 @@ separate repos would mean a separate subdomain each, which fragments the site.
 
 The URL taxonomy beyond this is deliberately unsettled. Ship the feed and a
 few items first, see what the paths want to be, then formalize.
+
+TradeFlow was considered as a candidate project path and explicitly kept
+out (2026-07-31) — it's a separate, unpublished project with its own repo
+question and a live-API-key exposure problem that a static, backend-less
+site can't solve. Don't propose folding it in without that being reopened.
 
 ---
 
@@ -69,6 +75,59 @@ few items first, see what the paths want to be, then formalize.
   (SplitText, MorphSVG, DrawSVG), commercial use covered.
 - **Anime.js is already in Elliot's toolkit** and is a reasonable default for
   simple orchestration.
+- **Parameter contract:** each effect ships a sidecar manifest (JSON/JS
+  metadata file, separate from the demo's own code) declaring its controls.
+  The shell reads the manifest to build the control rail without loading or
+  executing the demo — this is what makes it possible to show the rail
+  before the effect is in view. CSS custom properties are the default way a
+  control reaches the demo (shell writes `--speed`, `--amplitude`, etc. onto
+  a wrapper element); a JS callback is the escape hatch for anything CSS
+  can't express (discrete params, canvas/WebGL state).
+- **Viewer model:** dedicated full-bleed page per item, at
+  `/web-animations/<slug>/`. Only one demo runs at a time; full width for the
+  control rail and the writeup. The feed shows a static poster (screenshot)
+  per item, not a live running demo — keeps the feed cheap regardless of
+  how many effects it grows to.
+- **Mar-dash moves into loose-ends**, at `/mar-dash/`.
+- **Visual style ties to elliotolson.com** (2026-07-31, confirmed against
+  that site's actual compiled CSS, not guessed): typography is **Inter**
+  for body/nav/values and **Inter Tight** (heavy, ~900 weight, often
+  uppercase) for headings and labels. Base palette is near-black on white,
+  with body copy a soft dark grey (`#525252`) rather than pure black.
+  **`#f86916`** (burnt orange) is the one accent color, reused exactly —
+  it's what elliotolson.com uses for every interactive/button state, and
+  it does the same job here: the color that means "this is interactive"
+  (slider thumbs, toggle-on states, focus rings, links). One accent doing
+  all the signaling, not a palette — this still holds on the primary
+  surface; the additions below are scoped elsewhere, not a second accent
+  competing with it.
+- **Orange is scoped to small elements — never a large fill, never body
+  text.** Buttons, thumbs, underlines, focus rings: yes. A hero fill, a
+  large card background, body copy: no. Link text stays `--ink` on hover —
+  the underline intensifies instead, since accent-on-white text can't
+  clear 4.5:1 at any weight. **Exception, decided 2026-07-31:** button
+  labels are white on the accent fill (2.99:1, under the small-text AA
+  minimum) — Elliot's explicit call, wants white over the ink alternative
+  even knowing the number. Bold weight (700) on button labels to help
+  perceived legibility, though it doesn't create an official WCAG
+  exception at this text size. Don't "fix" this back to ink without
+  asking — it's a deliberate, informed trade, not an oversight.
+- **Logo mark:** `Simly.webp` (repo root), used as favicon and header mark.
+  Its teal, `#3fbdac`, sampled directly from the file, not eyeballed.
+  Verified 2.3:1 contrast on white — too low for text there, so it's a
+  graphic/heading color on the alt surface only (6.6:1), never body copy
+  on the light surface.
+- **Alt surface, added deliberately (2026-07-31):** `--bg-alt: #12263f`
+  (dark navy) with `--text-alt: #cfe5e6` (11.6:1 contrast, verified) as a
+  second, intentional surface — opted into per-element via `.surface-alt`,
+  never through `prefers-color-scheme`. This is not the dark-mode auto-swap
+  that broke contrast earlier; it's a separate designed pairing to have in
+  reserve (e.g. a highlighted feed item, a raised panel), applied on
+  purpose or not at all.
+- **This is the v1 visual foundation, locked (2026-07-31).** `tokens.css` +
+  `style-guide.html` are canonical, not a one-off — every project under
+  loose-ends builds on these tokens rather than inventing its own. Extend
+  by adding to `tokens.css`, don't fork it per project.
 
 ---
 
@@ -118,12 +177,12 @@ Ask before assuming. These are decisions Elliot makes, not defaults to pick.
 - **The subtitle.** One line under the name on the index. Signals that these
   are real, working, considered things that happen not to be finished. Not
   yet written.
-- **The parameter contract.** How a demo file declares its own controls so
-  the shell can auto-build a control rail. Locked in during shell work;
-  expensive to change after five items exist.
-- **Viewer model.** Full-bleed page per item, or a feed where items run in
-  place? Affects routing, performance, and how the index reads.
-- **Whether mar-dash moves here** or stays separate.
+- **A future "Inspiration" project.** Not the effects gallery (that's
+  `/web-animations/`) — a separate, later thing, an aggregator of where
+  Elliot draws inspiration from. Unscoped, parked for later.
+- **Deeper tint/shade palette.** Elliot's building this out further —
+  more steps around the existing colors in `tokens.css`, not a
+  replacement. Don't invent this ahead of him.
 
 ---
 

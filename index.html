@@ -28,18 +28,32 @@
     }
     body {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      place-items: center;
+      padding: var(--space-6);
     }
 
-    /* intro flourish — plays once per visit, then gets out of the way. */
+    /* epigraph and page-content share one grid cell (stacked, not
+       side-by-side) so both land in exactly the same centered spot on
+       the page — no separate top-pinned/bottom-centered layouts to
+       keep in sync. */
+    .stage {
+      display: grid;
+    }
+    .epigraph, .page-content {
+      grid-area: 1 / 1;
+      align-self: center;
+      justify-self: center;
+    }
+
+    /* intro flourish — plays once per visit, fully gone before the real
+       page starts appearing (no crossfade). */
     .epigraph {
       text-align: center;
-      padding: var(--space-7) var(--space-5) 0;
       opacity: 0;
     }
     .epigraph-text {
-      max-width: 700px;
+      max-width: 850px;
       margin: 0 auto;
       font-family: var(--font-display);
       font-weight: 900;
@@ -67,18 +81,18 @@
     }
 
     /* the real page — visible by default; only animates for visitors who
-       allow motion, timed to finish exactly as the epigraph vanishes. */
+       allow motion, and only starts once the epigraph has fully finished
+       (delay matches the epigraph's total 5400ms exactly). */
     .page-content {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      padding: var(--space-6) var(--space-8) var(--space-7);
+      align-items: center;
       opacity: 1;
     }
     @media (prefers-reduced-motion: no-preference) {
       .page-content {
         opacity: 0;
-        animation: fade-in 1200ms ease-out 4200ms forwards;
+        animation: fade-in 800ms ease-out 5400ms forwards;
       }
     }
     @keyframes fade-in {
@@ -87,47 +101,30 @@
     }
 
     .rooms-nav {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       max-width: 900px;
-    }
-    .rooms-nav h2 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-    }
-    .rooms {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .rooms li + li {
-      margin-top: var(--space-7);
-    }
-    .rooms h2 {
-      margin: 0;
     }
     .page-wink {
       width: 48px;
       height: 48px;
-      align-self: center;
       margin-top: var(--space-7);
     }
   </style>
 </head>
 <body>
-  <div class="epigraph">
-    <p class="epigraph-text">We swore we tied up every loose end, but you left our story running in an infinite loop. Turns out you can't just comment out the mess and pretend the code is clean.</p>
-    <img class="epigraph-wink" src="/assets/Simly.webp" alt="" aria-hidden="true">
-  </div>
+  <div class="stage">
+    <div class="epigraph">
+      <p class="epigraph-text">We swore we tied up every loose end, but you left our story running in an infinite loop. Turns out you can't just comment out the mess and pretend the code is clean.</p>
+      <img class="epigraph-wink" src="/assets/Simly.webp" alt="" aria-hidden="true">
+    </div>
 
-  <div class="page-content">
-    <nav class="rooms-nav" aria-label="Rooms">
-      <ul class="rooms">
-        <li><h2><a href="/writings/">Writings</a></h2></li>
-      </ul>
-    </nav>
-    <img class="page-wink" src="/assets/Simly.webp" alt="Loose Ends">
+    <div class="page-content">
+      <nav class="rooms-nav" aria-label="Rooms">
+        <ul class="big-nav">
+          <li><h2><a href="/writings/">Writings</a></h2></li>
+        </ul>
+      </nav>
+      <img class="page-wink" src="/assets/Simly.webp" alt="Loose Ends">
+    </div>
   </div>
 </body>
 </html>

@@ -33,6 +33,12 @@
   --bg-alt: #12263f;
   --text-alt: #cfe5e6;
 
+  /* a third grey, between --text (#525252) and --line (#e6e6e6). Resting
+     color for large nav items (2026-08-15) — deliberately soft, since
+     the rollover (dark fill + --text-alt) is where they announce
+     themselves, not their resting state. */
+  --text-soft: #999999;
+
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -81,13 +87,13 @@ h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0; }
 
 p { margin: 0 0 var(--space-4); max-width: 60ch; }
 
-/* No underline — color plus a trailing arrow carry "this is a link"
-   instead. --accent-hover (#df5607), not --accent (#f86916): 3.84:1 vs
-   2.99:1 on white. Neither clears full 4.5:1 body-text AA, same accepted
-   tradeoff class as the button labels (2026-08-15, Elliot's call) — df5607
-   was picked specifically because it's the higher-contrast of the two.
-   Color never changes on hover so that number never gets worse; hover
-   adds an underline instead, which isn't subject to text contrast rules. */
+/* No underline — color alone carries "this is a link." --accent-hover
+   (#df5607), not --accent (#f86916): 3.84:1 vs 2.99:1 on white. Neither
+   clears full 4.5:1 body-text AA, same accepted tradeoff class as the
+   button labels (2026-08-15, Elliot's call) — df5607 was picked
+   specifically because it's the higher-contrast of the two. Color never
+   changes on hover so that number never gets worse; hover adds an
+   underline instead, which isn't subject to text contrast rules. */
 a {
   color: var(--accent-hover);
   text-decoration: none;
@@ -96,11 +102,6 @@ a:hover {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
-}
-a:not(.back-link)::after {
-  content: "\2192";
-  display: inline-block;
-  margin-left: 0.3em;
 }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
@@ -254,21 +255,36 @@ select {
 
 .mt-5 { margin-top: var(--space-5); }
 
-/* a room's simple item list — just a linked heading with room to breathe.
-   Date/tags/summary live on the item's own page, not the list. Still
-   working out the general shape of a room's nav page (2026-08-15); this
-   is the first pass, scoped to Writings, not yet promoted as the pattern
-   every room will use. */
-.post-nav {
+/* Shared by root's room list and a room's own post list — a big linked
+   heading per item. Date/tags/summary live on the item's own page, not
+   the list. Resting color is --text-soft (soft, deliberately receded);
+   rollover fills with --bg-alt/--text-alt, the same verified dark
+   pairing .surface-alt uses (11.6:1) — reused here rather than a new
+   guess. Substantial padding so the fill reads as a real tile, not just
+   a color change on bare text. */
+.big-nav {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.post-nav li + li {
-  margin-top: var(--space-7);
+.big-nav li + li {
+  margin-top: var(--space-3);
 }
-.post-nav h2 {
+.big-nav h2 {
   margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+.big-nav a {
+  display: block;
+  color: var(--text-soft);
+  padding: var(--space-6) var(--space-7);
+  border-radius: var(--radius);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.big-nav a:hover {
+  background: var(--bg-alt);
+  color: var(--text-alt);
+  text-decoration: none;
 }
 
 .back-link {

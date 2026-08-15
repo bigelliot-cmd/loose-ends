@@ -146,23 +146,31 @@ site can't solve. Don't propose folding it in without that being reopened.
   `style-guide.html` are canonical, not a one-off — every project under
   loose-ends builds on these tokens rather than inventing its own. Extend
   by adding to `tokens.css`, don't fork it per project.
-- **Links, redone (2026-08-15):** no underline at rest. Color is
-  `--accent-hover` (`#df5607`), not `--ink` — 3.84:1 on white, same
-  accepted tradeoff class as the button labels, chosen because it's the
-  higher-contrast of the two accent tones. Color never changes on hover
-  (so that number can't get worse); hover adds an underline instead,
-  which isn't subject to text-contrast rules. Every link gets a trailing
-  `→`, except `.back-link` (already has its own leading `←`, don't stack
-  arrows pointing both ways).
+- **Links:** no underline at rest, no arrow (dropped 2026-08-15 — tried
+  once, didn't like it). Color is `--accent-hover` (`#df5607`), not
+  `--ink` — 3.84:1 on white, same accepted tradeoff class as the button
+  labels, chosen because it's the higher-contrast of the two accent
+  tones. Color never changes on hover (so that number can't get worse);
+  hover adds an underline instead, which isn't subject to text-contrast
+  rules.
 - **The index (`/`) plays a once-per-visit intro, `/writings/` doesn't.**
-  On `/`, the epigraph ("We swore we tied up...") fades in, holds 3s,
-  fades out, and the room nav crossfades in as it vanishes — via
-  `sessionStorage`, not `localStorage`, so it replays each new visit
-  (tab/window) rather than once ever. `/writings/` is deliberately plain:
-  a heading and a linked list of posts, no animation, no epigraph — it's
-  a nav page for the actual writing, not a second intro. Reduced-motion
-  visitors skip straight to the final state on `/`, same as everywhere
-  else on the site.
+  On `/`, the epigraph ("We swore we tied up...") and the revealed room
+  nav share one CSS grid cell (stacked, both centered in the same spot)
+  — the epigraph fades in, holds 3s, fades out **completely**, then the
+  nav fades in after, not a crossfade. Via `sessionStorage`, not
+  `localStorage`, so it replays each new visit (tab/window) rather than
+  once ever. `/writings/` is deliberately plain: a heading and a linked
+  list of posts, no animation, no epigraph — it's a nav page for the
+  actual writing, not a second intro. Reduced-motion visitors skip
+  straight to the final state on `/`, same as everywhere else.
+- **`.big-nav`, shared by root's room list and a room's own post list
+  (2026-08-15):** a big linked heading per item. Resting color is
+  `--text-soft` (`#999999`, a third grey between `--text` and `--line`)
+  — deliberately soft; the rollover is where an item announces itself,
+  not its resting state. Rollover fills the tile with `--bg-alt` /
+  `--text-alt`, the same verified dark pairing `.surface-alt` already
+  uses (11.6:1) — reused rather than a new guess. Substantial padding
+  (`--space-6` / `--space-7`) so the fill reads as a real tile.
 
 ---
 

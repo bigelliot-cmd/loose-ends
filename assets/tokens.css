@@ -81,17 +81,27 @@ h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0; }
 
 p { margin: 0 0 var(--space-4); max-width: 60ch; }
 
+/* No underline — color plus a trailing arrow carry "this is a link"
+   instead. --accent-hover (#df5607), not --accent (#f86916): 3.84:1 vs
+   2.99:1 on white. Neither clears full 4.5:1 body-text AA, same accepted
+   tradeoff class as the button labels (2026-08-15, Elliot's call) — df5607
+   was picked specifically because it's the higher-contrast of the two.
+   Color never changes on hover so that number never gets worse; hover
+   adds an underline instead, which isn't subject to text contrast rules. */
 a {
-  color: var(--ink);
-  text-decoration-color: var(--accent);
+  color: var(--accent-hover);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
-/* text stays --ink on hover, not --accent — orange-on-white text is
-   2.99:1, under the 4.5:1 a link needs. The underline (decoration, not
-   text) is where the accent is allowed to do its job, so it intensifies
-   instead. */
-a:hover { text-decoration-color: var(--accent-hover); text-decoration-thickness: 3px; }
+a:not(.back-link)::after {
+  content: "\2192";
+  display: inline-block;
+  margin-left: 0.3em;
+}
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -231,7 +241,7 @@ select {
 .surface-alt h1, .surface-alt h2, .surface-alt h3 {
   color: var(--teal);
 }
-.surface-alt a { color: var(--text-alt); text-decoration-color: var(--teal); }
+.surface-alt a { color: var(--text-alt); }
 .surface-alt a:hover { color: var(--teal); }
 .surface-alt .meta, .surface-alt .label { color: var(--text-alt); }
 
@@ -243,3 +253,25 @@ select {
 }
 
 .mt-5 { margin-top: var(--space-5); }
+
+/* a room's simple item list — just a linked heading with room to breathe.
+   Date/tags/summary live on the item's own page, not the list. Still
+   working out the general shape of a room's nav page (2026-08-15); this
+   is the first pass, scoped to Writings, not yet promoted as the pattern
+   every room will use. */
+.post-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.post-nav li + li {
+  margin-top: var(--space-7);
+}
+.post-nav h2 {
+  margin: 0;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-6);
+}

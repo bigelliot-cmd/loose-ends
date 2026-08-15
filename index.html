@@ -4,56 +4,130 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Loose Ends</title>
-  <link rel="icon" href="Simly.webp" type="image/webp">
+  <link rel="icon" href="/assets/Simly.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/tokens.css">
+  <script>
+    /* Runs before paint so there's no flash of the intro replaying.
+       sessionStorage, not localStorage — plays again each new visit
+       (new tab/window), not just once ever on this browser. */
+    if (sessionStorage.getItem('loose-ends-intro-seen')) {
+      document.documentElement.classList.add('skip-intro');
+    } else {
+      sessionStorage.setItem('loose-ends-intro-seen', '1');
+    }
+  </script>
   <style>
+    html.skip-intro .epigraph {
+      display: none;
+    }
+    html.skip-intro .page-content {
+      opacity: 1;
+      animation: none;
+    }
     body {
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--space-6);
+      flex-direction: column;
     }
-    .hero {
-      max-width: 900px;
+
+    /* intro flourish — plays once per visit, then gets out of the way. */
+    .epigraph {
       text-align: center;
+      padding: var(--space-7) var(--space-5) 0;
+      opacity: 0;
     }
-    .hero h1 {
+    .epigraph-text {
+      max-width: 700px;
+      margin: 0 auto;
+      font-family: var(--font-display);
+      font-weight: 900;
       font-size: clamp(1.5rem, 4vw, 2.75rem);
       line-height: 1.35;
       letter-spacing: -0.005em;
+      color: var(--ink);
     }
-    .hero h1 .line {
+    .epigraph-wink {
       display: block;
-    }
-    .hero-wink {
-      display: inline-block;
       width: 48px;
       height: 48px;
-      margin-top: var(--space-7);
+      margin: var(--space-6) auto 0;
     }
     @media (prefers-reduced-motion: no-preference) {
-      .hero h1 .line,
-      .hero-wink {
-        opacity: 0;
-        animation: fade-in 1200ms ease-out forwards;
+      .epigraph {
+        animation: epigraph-cycle 5400ms ease-in-out forwards;
       }
-      .line-1 { animation-delay: 0ms; }
-      .line-2 { animation-delay: 600ms; }
-      .hero-wink { animation-delay: 1200ms; }
+    }
+    @keyframes epigraph-cycle {
+      0%   { opacity: 0; }
+      22%  { opacity: 1; }
+      78%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* the real page — visible by default; only animates for visitors who
+       allow motion, timed to finish exactly as the epigraph vanishes. */
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-6) var(--space-8) var(--space-7);
+      opacity: 1;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .page-content {
+        opacity: 0;
+        animation: fade-in 1200ms ease-out 4200ms forwards;
+      }
     }
     @keyframes fade-in {
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    .rooms-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 900px;
+    }
+    .rooms-nav h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+    .rooms {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .rooms li + li {
+      margin-top: var(--space-7);
+    }
+    .rooms h2 {
+      margin: 0;
+    }
+    .page-wink {
+      width: 48px;
+      height: 48px;
+      align-self: center;
+      margin-top: var(--space-7);
+    }
   </style>
 </head>
 <body>
-  <div class="hero">
-    <h1><span class="line line-1">We swore we tied up every loose end,</span><span class="line line-2">but you left our story running in an infinite loop. Turns out you can't just comment out the mess and pretend the code is clean.</span></h1>
-    <img class="hero-wink" src="Simly.webp" alt="" aria-hidden="true">
+  <div class="epigraph">
+    <p class="epigraph-text">We swore we tied up every loose end, but you left our story running in an infinite loop. Turns out you can't just comment out the mess and pretend the code is clean.</p>
+    <img class="epigraph-wink" src="/assets/Simly.webp" alt="" aria-hidden="true">
+  </div>
+
+  <div class="page-content">
+    <nav class="rooms-nav" aria-label="Rooms">
+      <ul class="rooms">
+        <li><h2><a href="/writings/">Writings</a></h2></li>
+      </ul>
+    </nav>
+    <img class="page-wink" src="/assets/Simly.webp" alt="Loose Ends">
   </div>
 </body>
 </html>

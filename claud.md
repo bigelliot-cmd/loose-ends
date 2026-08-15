@@ -32,18 +32,26 @@ contents are allowed to be rough.
 One repo, one custom domain, projects as paths underneath.
 
 ```
-/                        the feed — every item, newest first
-/web-animations/         the effects gallery
+/                        nav — lists the rooms that exist, nothing else
+/writings/               a room: list of posts, newest first
+/writings/<slug>/        an individual post
+/web-animations/         a room: the effects gallery
 /web-animations/<slug>/  an individual effect
-/mar-dash/               the Mariners dashboard
-/<project>/              any other project at its own path
+/mar-dash/               a room: the Mariners dashboard
+/assets/                 shared css/js/fonts — not a room, no nav entry
+/<project>/              any other room, at its own path
 ```
 
 Do not split projects into separate repos. One repo gets one custom domain;
 separate repos would mean a separate subdomain each, which fragments the site.
 
-The URL taxonomy beyond this is deliberately unsettled. Ship the feed and a
-few items first, see what the paths want to be, then formalize.
+The URL taxonomy beyond this is deliberately unsettled. Ship a few rooms
+first, see what the paths want to be, then formalize.
+
+**A room only gets a nav entry once it has real content in it.** Never add
+Motion, Dashboards, or any other placeholder room to the nav ahead of time
+— they get created (and only then linked from `/`) when there's actually
+something to click through to.
 
 TradeFlow was considered as a candidate project path and explicitly kept
 out (2026-07-31) — it's a separate, unpublished project with its own repo
@@ -62,8 +70,18 @@ site can't solve. Don't propose folding it in without that being reopened.
 - **No build step** unless something genuinely needs one. Hand-written HTML,
   CSS, and JS. If a build becomes necessary, GitHub Actions — not a
   framework by default.
-- **Feed is flat and reverse-chronological, with tags.** No sections. Sections
-  get imposed later, once there are enough items to see a real shape.
+- **`.nojekyll` is in the repo root** (added 2026-08-15). Nothing here is
+  authored as Jekyll, but GitHub Pages runs every site through Jekyll's
+  processor by default regardless — without this file, an underscore-
+  prefixed folder (`_posts`, `_includes`, anything) would silently vanish
+  from the live site. This makes "hand-rolled static HTML" actually true
+  at the hosting layer, not just true in how it's written.
+- **Rooms, not one sitewide feed** (revised 2026-08-15, supersedes the
+  original "flat feed, no sections" idea for `/`). `/` is nav only — a mark,
+  the name, and links to whatever rooms currently have content. Each room
+  owns its own flat, reverse-chronological, tagged listing internally
+  (`/writings/` lists posts newest-first) — the original flat-feed idea
+  survives at the room level, it's just not one sitewide list anymore.
 - **The shell carries the polish.** Every item sits in the same well-made
   frame with the same controls and metadata slots. That consistency is what
   makes rough contents read as a practice rather than a junk drawer.
@@ -128,6 +146,23 @@ site can't solve. Don't propose folding it in without that being reopened.
   `style-guide.html` are canonical, not a one-off — every project under
   loose-ends builds on these tokens rather than inventing its own. Extend
   by adding to `tokens.css`, don't fork it per project.
+- **Links, redone (2026-08-15):** no underline at rest. Color is
+  `--accent-hover` (`#df5607`), not `--ink` — 3.84:1 on white, same
+  accepted tradeoff class as the button labels, chosen because it's the
+  higher-contrast of the two accent tones. Color never changes on hover
+  (so that number can't get worse); hover adds an underline instead,
+  which isn't subject to text-contrast rules. Every link gets a trailing
+  `→`, except `.back-link` (already has its own leading `←`, don't stack
+  arrows pointing both ways).
+- **The index (`/`) plays a once-per-visit intro, `/writings/` doesn't.**
+  On `/`, the epigraph ("We swore we tied up...") fades in, holds 3s,
+  fades out, and the room nav crossfades in as it vanishes — via
+  `sessionStorage`, not `localStorage`, so it replays each new visit
+  (tab/window) rather than once ever. `/writings/` is deliberately plain:
+  a heading and a linked list of posts, no animation, no epigraph — it's
+  a nav page for the actual writing, not a second intro. Reduced-motion
+  visitors skip straight to the final state on `/`, same as everywhere
+  else on the site.
 
 ---
 

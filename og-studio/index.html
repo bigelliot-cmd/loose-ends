@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loose Ends — OG Studio</title>
+  <meta name="description" content="A generator for a brand's system graphics: dot fields, masses, hatched discs and arcs, rolled from a seed and exported as colour and greyscale pairs.">
+  <link rel="icon" href="/assets/Simly.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/tokens.css">
+  <style>
+    .wrap { max-width: 900px; margin: 0 auto; padding: var(--space-8) var(--space-5); }
+    .post-meta { margin-bottom: var(--space-5); }
+    .post-meta .label--inline { display: block; margin-top: var(--space-1); }
+    .dek { font-size: 1.15rem; color: var(--ink); max-width: 56ch; }
+    .open { margin: var(--space-3) 0 var(--space-7); }
+    .open .button { text-decoration: none; }
+    figure { margin: 0 0 var(--space-7); }
+    figure img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+    figcaption { margin-top: var(--space-2); }
+    .writeup { max-width: 700px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back-link meta" href="/">&larr; Loose Ends</a>
+    <article>
+      <h1>OG Studio</h1>
+      <div class="post-meta">
+        <span class="meta">August 2026</span>
+        <span class="label label--inline">Tool, Generative, Brand systems</span>
+      </div>
+      <p class="dek">A generator for a brand's system graphics: dot fields, masses, hatched discs and arcs, rolled from a seed and exported as colour and greyscale pairs.</p>
+      <p class="open"><a class="button button--solid" href="/og-studio/tool/">Open the tool</a></p>
+
+      <figure>
+        <img src="/og-studio/screen.jpg" alt="OG Studio: a control rail on the left, a generated dot-field graphic in the centre, and a grid of twelve variations below it." width="1440" height="900">
+        <figcaption class="meta">One seed, twelve variations</figcaption>
+      </figure>
+
+      <!-- DRAFT (2026-10-25): placeholder intro by Claude. Elliot is writing the real write-up; replace this section with it. -->
+      <section class="writeup">
+        <p>I built this so people on my team could make on-system graphics without waiting on a designer or digging up a source file. Every graphic comes from a seed, so anyone can get back to the one they liked by typing six characters.</p>
+        <p>The rules were measured from a reference set rather than invented: the grid pitch, the dot weight, and how the colour splits across the field. Locks hold a composition, a palette or the grain steady while everything else rerolls. Each export is a pair, the colour graphic and a greyscale twin with identical geometry.</p>
+      </section>
+    </article>
+  </div>
+</body>
+</html>

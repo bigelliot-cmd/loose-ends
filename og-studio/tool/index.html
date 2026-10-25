@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OG Studio — Loose Ends</title>
+<link rel="icon" href="/assets/Simly.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1113;--panel:#16191c;--panel2:#1d2126;--rule:#282d33;--soft:#212529;
+    --text:#e9eaec;--muted:#878e96;--dim:#5b626a;--bone:#e8e4dc;--pin:#6ea8d8;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --ui:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}html,body{height:100%}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--ui);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  button,input,select{font-family:inherit;font-size:inherit;color:inherit}button{cursor:pointer}
+  .shell{display:grid;grid-template-columns:322px 1fr;height:100vh;overflow:hidden}
+  @media(max-width:960px){.shell{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:100vh}}
+
+  .rail{background:var(--panel);border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow:hidden}
+  .rhead{padding:14px 16px 12px;border-bottom:1px solid var(--rule)}
+  .rhead h1{margin:0 0 2px;font-size:13px;font-weight:650}
+  .rhead p{margin:0;color:var(--muted);font-size:11.5px}
+  .rhead .back{display:inline-block;margin-top:6px;color:var(--dim);font-size:11px;text-decoration:none}.rhead .back:hover{color:var(--bone)}
+  .rbody{overflow-y:auto;flex:1;padding-bottom:12px}
+  .rbody::-webkit-scrollbar{width:9px}
+  .rbody::-webkit-scrollbar-thumb{background:#2d333a;border:3px solid var(--panel);border-radius:9px}
+  .sec{border-bottom:1px solid var(--soft);padding:13px 16px 15px}
+  .sech{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .sech h2{margin:0;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600;flex:1}
+  .note{font-family:var(--mono);font-size:10px;color:var(--dim)}
+  .lbl{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+  .val{font-family:var(--mono);font-size:11px;color:var(--bone)}
+  .field{margin-top:12px}.field:first-child{margin-top:0}
+  .hint{color:var(--dim);font-size:11px;margin:8px 0 0;line-height:1.42}
+  .row{display:flex;gap:7px;align-items:center}
+
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:18px;background:transparent;margin:0;cursor:pointer}
+  input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--rule);border-radius:2px}
+  input[type=range]::-moz-range-track{height:2px;background:var(--rule)}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-5px;border-radius:50%;background:var(--bone);box-shadow:0 0 0 3px var(--panel)}
+  input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--bone);border:none}
+  input[type=text],select{background:var(--panel2);border:1px solid var(--rule);border-radius:5px;padding:6px 8px;width:100%;outline:none}
+  select:focus,input:focus{border-color:var(--bone)}
+
+  .btn{background:var(--panel2);border:1px solid var(--rule);border-radius:5px;padding:7px 11px;white-space:nowrap;transition:.12s}
+  .btn:hover{background:#252b31;border-color:#39404a}
+  .btn.wide{width:100%}.btn.sm{padding:5px 8px;font-size:11.5px}.btn.ghost{background:transparent}
+  .btn.primary{background:var(--bone);border-color:var(--bone);color:#14171a;font-weight:650}
+  .btn.primary:hover{background:#f2efe8}
+  .kbd{font-family:var(--mono);font-size:10px;background:rgba(0,0,0,.12);border:1px solid rgba(0,0,0,.2);border-radius:3px;padding:1px 4px;margin-left:6px}
+  .seg{display:flex;border:1px solid var(--rule);border-radius:5px;overflow:hidden}
+  .seg button{flex:1;background:var(--panel2);border:none;border-right:1px solid var(--rule);padding:6px 4px;font-size:11.5px;color:var(--muted)}
+  .seg button:last-child{border-right:none}
+  .seg button[aria-pressed=true]{background:#31373f;color:var(--text)}
+
+  /* LOCKS — deliberately prominent */
+  .locks{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .lockbtn{display:flex;align-items:center;gap:7px;border:1px solid var(--rule);background:var(--panel2);border-radius:5px;padding:8px 9px;color:var(--muted);text-align:left}
+  .lockbtn .ic{width:13px;height:13px;flex:none;opacity:.6}
+  .lockbtn[aria-pressed=true]{background:var(--pin);border-color:var(--pin);color:#0e1418;font-weight:600}
+  .lockbtn[aria-pressed=true] .ic{opacity:1}
+
+  .fams{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .fam{border:1px solid var(--rule);border-radius:4px;overflow:hidden;height:25px;display:flex;padding:0}
+  .fam i{flex:1}
+  .fam[aria-pressed=false]{opacity:.24}
+  .fam[aria-pressed=true]{box-shadow:0 0 0 1px var(--bone) inset;border-color:var(--bone)}
+
+  .motifs{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+  .motif{display:flex;align-items:center;gap:7px;border:1px solid var(--rule);background:var(--panel2);border-radius:4px;padding:5px 7px;font-size:11.5px;color:var(--dim)}
+  .motif[aria-pressed=true]{color:var(--text);border-color:#454d57}
+  .motif svg{width:15px;height:15px;flex:none}
+
+  .main{display:flex;flex-direction:column;overflow:hidden}
+  .bar{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--rule);background:var(--panel);flex-wrap:wrap}
+  .bar .spacer{flex:1}
+  .status{font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .history{display:none;align-items:center;gap:6px;padding:7px 14px;border-bottom:1px solid var(--rule);background:var(--panel);overflow-x:auto}
+  .history.on{display:flex}
+  .history .hlabel{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);flex:none;margin-right:2px}
+  .history button{font-family:var(--mono);font-size:11px;background:var(--panel2);border:1px solid var(--rule);border-radius:4px;padding:4px 9px;color:var(--muted);white-space:nowrap;flex:none}
+  .history button:hover{background:#252b31;border-color:#39404a;color:var(--text)}
+  .history button[aria-current=true]{border-color:var(--bone);color:var(--bone)}
+  .stagewrap{flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;align-items:center;gap:20px}
+  .canvas{position:relative;width:min(100%,880px);box-shadow:0 20px 54px rgba(0,0,0,.5);border-radius:2px;overflow:hidden}
+  .canvas svg{display:block;width:100%;height:auto}
+  .gallery{width:min(100%,880px)}
+  .gallery h3{margin:0 0 9px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .cell{border:1px solid var(--rule);border-radius:3px;overflow:hidden;padding:0;position:relative;display:block;background:#111}
+  .cell svg{display:block;width:100%;height:auto}
+  .cell b{position:absolute;left:0;bottom:0;font-family:var(--mono);font-size:9px;font-weight:400;background:rgba(15,17,19,.8);color:var(--bone);padding:1px 5px}
+  .cell[aria-current=true]{outline:2px solid var(--bone);outline-offset:1px}
+  .modal{position:fixed;inset:0;background:rgba(6,8,10,.8);display:none;place-items:center;padding:28px;z-index:50}
+  .modal.on{display:grid}
+  .sheet{background:var(--panel);border:1px solid var(--rule);border-radius:8px;width:min(720px,100%);max-height:84vh;display:flex;flex-direction:column;overflow:hidden}
+  .sheet header{padding:12px 16px;border-bottom:1px solid var(--rule);display:flex;gap:10px;align-items:center}
+  .sheet header h3{margin:0;font-size:13px}
+  .sheet textarea{flex:1;min-height:320px;border:none;background:var(--ink);color:#ccd2d8;padding:14px;font-family:var(--mono);font-size:11px;resize:none;outline:none}
+  .sheet footer{padding:11px 16px;border-top:1px solid var(--rule);display:flex;gap:8px;justify-content:flex-end}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--panel2);border:1px solid var(--rule);border-radius:5px;padding:8px 14px;font-size:12px;opacity:0;pointer-events:none;transition:.18s;z-index:60}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+  <div class="rhead"><h1>OG Studio</h1><p>Generates system graphics from a seed. No source file needed.</p><a class="back" href="/og-studio/">&larr; About OG Studio</a></div>
+  <div class="rbody">
+
+    <section class="sec">
+      <div class="sech"><h2>Lock</h2></div>
+      <div class="locks">
+        <button class="lockbtn" id="lkComp" aria-pressed="false" title="Keeps the same composition type running. Its internal layout, positions, and counts still vary each reroll."><svg class="ic" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="5.2" width="9" height="5.3" rx="1"/><path d="M3.6 5.2V3.6a2.4 2.4 0 0 1 4.8 0v1.6"/></svg>Composition</button>
+        <button class="lockbtn" id="lkPal" aria-pressed="false" title="Keeps the exact colours — family, tones, and background. Composition and layout still vary."><svg class="ic" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="5.2" width="9" height="5.3" rx="1"/><path d="M3.6 5.2V3.6a2.4 2.4 0 0 1 4.8 0v1.6"/></svg>Palette</button>
+        <button class="lockbtn" id="lkGrain" aria-pressed="false" title="Keeps the dot grid pitch and dot size the same. Coverage and colour still vary."><svg class="ic" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="5.2" width="9" height="5.3" rx="1"/><path d="M3.6 5.2V3.6a2.4 2.4 0 0 1 4.8 0v1.6"/></svg>Grid &amp; grain</button>
+        <button class="lockbtn" id="lkMass" aria-pressed="false" title="Keeps masses turned on or off, whichever they currently are. Their shape and position still vary."><svg class="ic" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="5.2" width="9" height="5.3" rx="1"/><path d="M3.6 5.2V3.6a2.4 2.4 0 0 1 4.8 0v1.6"/></svg>Masses</button>
+      </div>
+      <p class="hint">Locked parts survive a reroll — hover a lock to see exactly what it holds fixed. Nothing else does: composition still shuffles unless it's locked too. Lock Palette and keep generating to explore layout inside one colourway.</p>
+    </section>
+
+    <section class="sec">
+      <div class="sech"><h2>Composition</h2><span class="note">1200 × 675</span></div>
+      <select id="arch"><option value="auto">Any composition</option></select>
+      <div class="field">
+        <div class="lbl"><label>Negative space</label></div>
+        <div class="seg" role="group" aria-label="Negative space">
+          <button data-open="open" aria-pressed="true">Open</button>
+          <button data-open="bleed" aria-pressed="false">Full bleed</button>
+        </div>
+        <p class="hint">Open keeps a large clear area of ground, the way your reference set does. Full bleed pushes the field to every edge.</p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sech"><h2>Grid</h2></div>
+      <div class="field">
+        <div class="lbl"><label for="grain">Grain</label><span class="val" id="grainV">30 px</span></div>
+        <input type="range" id="grain" min="16" max="40" value="30">
+      </div>
+      <div class="field">
+        <div class="lbl"><label for="dotr">Dot weight</label><span class="val" id="dotrV">0.62</span></div>
+        <input type="range" id="dotr" min="35" max="85" value="62">
+      </div>
+      <div class="field">
+        <div class="lbl"><label for="cover">Coverage</label><span class="val" id="coverV">78%</span></div>
+        <input type="range" id="cover" min="20" max="100" value="78">
+      </div>
+      <p class="hint">Grain is the grid pitch; dot weight is diameter as a share of it. Grain is stated at reference scale and is applied proportionally to the 675&nbsp;px canvas. Your reference files sit at 30&nbsp;px and 0.62.</p>
+    </section>
+
+    <section class="sec">
+      <div class="sech"><h2>Motifs</h2></div>
+      <div class="motifs" id="motifs"></div>
+      <div class="field">
+        <div class="lbl"><label for="mcount">Motif count</label><span class="val" id="mcountV">Balanced</span></div>
+        <input type="range" id="mcount" min="1" max="5" value="3">
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sech"><h2>Colour</h2></div>
+      <div class="fams" id="fams"></div>
+      <div class="field">
+        <div class="lbl"><label>Ground</label></div>
+        <div class="seg" role="group" aria-label="Ground">
+          <button data-bg="dark" aria-pressed="true">Dark</button>
+          <button data-bg="light" aria-pressed="false">Light</button>
+          <button data-bg="tint" aria-pressed="false">Tinted</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="lbl"><label for="pop">Accent density</label><span class="val" id="popV">Normal</span></div>
+        <input type="range" id="pop" min="1" max="5" value="3">
+      </div>
+      <p class="hint">The field stays mostly one quiet tone, with accents seeded through it — the 75 / 15 / 8 / 3 split measured from your reference set.</p>
+    </section>
+
+    <section class="sec">
+      <div class="sech"><h2>Export</h2></div>
+      <button class="btn wide primary" id="pairSvg">Download pair — SVG</button>
+      <button class="btn wide" id="pairPng" style="margin-top:7px">Download pair — PNG @2×</button>
+      <p class="hint">A pair is the colour graphic plus its greyscale twin, built from the same seed so the geometry matches exactly.</p>
+      <div class="row" style="margin-top:10px">
+        <button class="btn sm ghost" id="png1" style="flex:1">PNG</button>
+        <button class="btn sm ghost" id="png2" style="flex:1">PNG @2×</button>
+        <button class="btn sm ghost" id="svgBtn" style="flex:1">SVG</button>
+      </div>
+      <button class="btn wide ghost sm" id="codeBtn" style="margin-top:7px">Show SVG code</button>
+      <button class="btn wide ghost sm" id="zipAll" style="margin-top:7px">Download all 12 as pairs</button>
+    </section>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="bar">
+    <button class="btn primary" id="gen">Generate<span class="kbd">Space</span></button>
+    <button class="btn sm" id="genSet">Generate 12</button>
+    <input type="text" id="seed" style="width:110px;font-family:var(--mono)" aria-label="Seed" spellcheck="false">
+    <div class="seg" role="group" aria-label="Preview" style="width:132px">
+      <button data-mono="0" aria-pressed="true">Colour</button>
+      <button data-mono="1" aria-pressed="false">Mono</button>
+    </div>
+    <div class="spacer"></div>
+    <span class="status" id="status"></span>
+  </div>
+  <div class="history" id="history" role="group" aria-label="Recent seeds"></div>
+  <div class="stagewrap">
+    <div class="canvas" id="canvas"></div>
+    <div class="gallery" id="gallery" style="display:none"><h3>Variations</h3><div class="grid" id="grid"></div></div>
+  </div>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="sheet">
+  <header><h3>SVG source</h3><div style="flex:1"></div><button class="btn sm" id="mClose">Close</button></header>
+  <textarea id="mText" spellcheck="false" readonly></textarea>
+  <footer><button class="btn sm" id="mSel">Select all</button><button class="btn sm primary" id="mCopy">Copy</button></footer>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+const r1=n=>Math.round(n*10)/10;
+const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
+const TAU=Math.PI*2;
+
+/* ── seeded rng ─────────────────────────────────────────── */
+function hashSeed(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const newSeed=()=>Math.random().toString(36).slice(2,8).toUpperCase();
+const pick=(g,a)=>a[Math.floor(g()*a.length)];
+const rnd=(g,a,b)=>a+g()*(b-a);
+
+/* value noise for organic clustering */
+function noiseFn(g){
+  const p=new Float64Array(256);for(let i=0;i<256;i++)p[i]=g();
+  const h=(x,y)=>p[(x*73+y*151+((x*y)&255))&255];
+  const sm=t=>t*t*(3-2*t);
+  return(x,y)=>{
+    const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;
+    const u=sm(xf),v=sm(yf);
+    return (h(xi,yi)*(1-u)+h(xi+1,yi)*u)*(1-v)+(h(xi,yi+1)*(1-u)+h(xi+1,yi+1)*u)*v;
+  };
+}
+
+/* ── brand ramps ────────────────────────────────────────── */
+const RAMPS={
+  "Red":["#ffc9c4","#ffa59e","#ff918c","#ff636b","#b30013","#7d0007","#530001","#39000b"],
+  "Tangerine":["#ffe4c4","#ffd3a6","#ffc180","#ffac5c","#c96718","#a35415","#733800","#4d2601"],
+  "Jade":["#b1f2be","#7fe590","#53d36b","#42ba5b","#007d30","#025f26","#034709","#003105"],
+  "Surf":["#abf5f3","#86f0e6","#5fded3","#26c7bd","#007a76","#005250","#003635","#002724"],
+  "Bay":["#ade4ff","#7dceff","#5db8f5","#4aa1e0","#045b91","#004278","#003155","#002349"],
+  "River":["#b8d5ff","#8fbaff","#6b9fff","#4a7de1","#002b8c","#00216b","#00174c","#041538"],
+  "Eggplant":["#ecc2ff","#e4abff","#db99ff","#c177f3","#6e23a1","#3e1459","#2b0e3d","#1e0a2b"],
+  "Raspberry":["#ffc7ee","#ffa3e1","#ed79c4","#d653aa","#9c1174","#730052","#59003e","#450030"]
+};
+const FAMS=Object.keys(RAMPS);
+const GREY={l1:"#faf9f7",l2:"#f5f5f5",l3:"#e6e6e6",l4:"#cccccc",d1:"#999999",d2:"#666666",d3:"#343434",d4:"#222222"};
+
+/* ── palette construction ───────────────────────────────────
+   Every colourway is built together with a structurally identical
+   greyscale twin, so the mono export is the same graphic, not a
+   desaturation of it. Both are derived from one set of rng draws,
+   which keeps geometry byte-identical across the pair.
+   Every colour used anywhere is one of these exact hex values — RAMPS or
+   GREY, verbatim, never derived/rotated/blended into a new one. The brand
+   palette is fixed; only which of its colours get used, and where, varies. */
+function makePalette(g,sel,bgMode){
+  const fam=sel.size?pick(g,[...sel]):pick(g,FAMS);
+  const ramp=RAMPS[fam];
+  const alt=g()<0.7;                           // drawn once, shared by both twins
+  let c,m;
+
+  if(bgMode==="tint"){
+    c={bg:ramp[7],fieldBase:ramp[6],accent:ramp[4],light:ramp[2],pop:ramp[1],band:ramp[2],
+       massTones:[ramp[6],ramp[5],ramp[3]],ring:ramp[2],hatch:ramp[3],hatchFill:ramp[4],
+       onMass:{base:ramp[7],accent:ramp[6],light:GREY.l2,pop:ramp[1]}};
+    m={bg:GREY.d4,fieldBase:GREY.d3,accent:GREY.d2,light:GREY.l4,pop:GREY.d1,band:GREY.l4,
+       massTones:[GREY.d3,GREY.d2,GREY.d1],ring:GREY.l4,hatch:GREY.d1,hatchFill:GREY.d2,
+       onMass:{base:GREY.d4,accent:GREY.d3,light:GREY.l2,pop:GREY.d1}};
+  }else if(bgMode==="light"){
+    c={bg:GREY.l1,fieldBase:GREY.d3,accent:ramp[4],light:ramp[2],pop:ramp[3],band:ramp[3],
+       massTones:[GREY.l2,GREY.l3,ramp[2]],ring:ramp[5],hatch:ramp[3],hatchFill:ramp[2],
+       onMass:{base:GREY.l1,accent:ramp[6],light:GREY.l2,pop:ramp[5]}};
+    m={bg:GREY.l1,fieldBase:GREY.d3,accent:GREY.d2,light:GREY.d1,pop:GREY.l4,band:GREY.d1,
+       massTones:[GREY.l2,GREY.l3,GREY.l4],ring:GREY.d2,hatch:GREY.d2,hatchFill:GREY.l4,
+       onMass:{base:GREY.l1,accent:GREY.d1,light:GREY.l2,pop:GREY.d2}};
+  }else{
+    // ground is always Black 4, so a mass tone can never collide with it
+    c={bg:GREY.d4,fieldBase:GREY.d2,accent:ramp[4],light:ramp[1],pop:ramp[3],band:ramp[2],
+       massTones:[alt?GREY.d3:ramp[7],ramp[6],ramp[3]],ring:GREY.l2,hatch:ramp[2],hatchFill:ramp[3],
+       onMass:{base:ramp[7],accent:ramp[6],light:GREY.l2,pop:ramp[1]}};
+    m={bg:GREY.d4,fieldBase:GREY.d2,accent:GREY.d1,light:GREY.l2,pop:GREY.l4,band:GREY.l4,
+       massTones:[GREY.d3,GREY.d2,GREY.d1],ring:GREY.l2,hatch:GREY.d1,hatchFill:GREY.d2,
+       onMass:{base:GREY.d4,accent:GREY.d3,light:GREY.l2,pop:GREY.d1}};
+  }
+  // `ramp` is deliberately NOT carried onto the palette: a composition reaching
+  // into it would pull brand colour into the mono twin, which is how the leak
+  // in `matrix` happened. Everything a composition needs is a named role above.
+  const deco=o=>({...o,fam,dark:bgMode!=="light"});
+  return{fam,c:deco(c),m:deco(m)};
+}
+function fieldColor(g,P,popLevel,tones){
+  // measured distribution from the reference set: ~75 / 15 / 7 / 3
+  const T=tones||{base:P.fieldBase,accent:P.accent,light:P.light,pop:P.pop};
+  const boost=(popLevel-3)*0.045;
+  const r=g();
+  if(r<0.75-boost*2)return T.base;
+  if(r<0.90-boost)return T.accent;
+  if(r<0.975)return T.light;
+  return T.pop;
+}/* ── primitives ─────────────────────────────────────────── */
+const E=[];
+const push=s=>E.push(s);
+/* dots are the one element that must never be cropped — a dot sliced by the
+   canvas edge reads as a rendering glitch, not a bleed. Every dot is skipped
+   if its own radius would carry it past the true edge, so the clearspace is
+   just the dot's radius: a few px, scaling with dot weight. Masses and every
+   other motif are unaffected and keep bleeding off the edge as before. */
+function dot(x,y,r,fill){
+  if(x-r<0||x+r>S.W||y-r<0||y+r>S.H)return;
+  push(`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="${fill}"/>`);
+}
+function capsule(x,y,len,th,ang,fill){
+  push(`<rect x="${r1(-len/2)}" y="${r1(-th/2)}" width="${r1(len)}" height="${r1(th)}" rx="${r1(th/2)}" fill="${fill}" transform="translate(${r1(x)} ${r1(y)}) rotate(${r1(ang)})"/>`);
+}
+function ring(x,y,r,w,stroke){
+  push(`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="none" stroke="${stroke}" stroke-width="${r1(w)}"/>`);
+}
+function arc(cx,cy,r,a0,a1,w,stroke){
+  const p=a=>[cx+Math.cos(a)*r,cy+Math.sin(a)*r];
+  const[x0,y0]=p(a0),[x1,y1]=p(a1);
+  const large=Math.abs(a1-a0)>Math.PI?1:0;
+  push(`<path d="M${r1(x0)} ${r1(y0)} A${r1(r)} ${r1(r)} 0 ${large} 1 ${r1(x1)} ${r1(y1)}" fill="none" stroke="${stroke}" stroke-width="${r1(w)}" stroke-linecap="round"/>`);
+}
+/* Rule: a partial arc is never allowed to dangle with an endpoint floating
+   inside the frame — it either closes into a full circle (use ring() for
+   that) or both its ends land outside the canvas, reading as a stroke that
+   genuinely crosses through. Anchoring the centre just off one edge and
+   aiming the sweep back inward — arcfield's original trick — makes that
+   true almost every attempt; the endpoint check is the guarantee, not a
+   guess. If every attempt still fails, the arc is skipped rather than drawn
+   dangling, the same "settle for fewer, never draw it wrong" tradeoff used
+   for disc placement elsewhere in this file. */
+function crossingArc(g,W,H,w,stroke,rMin,rMax,sweepMin,sweepMax,tries){
+  tries=tries||16;
+  const out=(x,y)=>x<0||x>W||y<0||y>H;
+  for(let t=0;t<tries;t++){
+    const side=Math.floor(g()*4);            // 0 below, 1 above, 2 left, 3 right
+    const r=H*rnd(g,rMin,rMax);
+    const off=r*rnd(g,0.55,0.88);             // tied to r, not H — keeps how far the sweep has to travel to clear the edge proportional to the radius, or a small r stays stuck "still inside" no matter how many attempts it gets
+    const along=rnd(g,0.15,0.85);
+    let cx,cy,inward;
+    if(side===0){cx=W*along;cy=H+off;inward=-Math.PI/2;}
+    else if(side===1){cx=W*along;cy=-off;inward=Math.PI/2;}
+    else if(side===2){cx=-off;cy=H*along;inward=0;}
+    else{cx=W+off;cy=H*along;inward=Math.PI;}
+    const sweep=rnd(g,sweepMin,sweepMax);
+    const a0=inward-sweep/2+rnd(g,-0.15,0.15),a1=a0+sweep;
+    const p0x=cx+Math.cos(a0)*r,p0y=cy+Math.sin(a0)*r;
+    const p1x=cx+Math.cos(a1)*r,p1y=cy+Math.sin(a1)*r;
+    if(out(p0x,p0y)&&out(p1x,p1y)){arc(cx,cy,r,a0,a1,w,stroke);return true;}
+  }
+  return false;
+}
+/* Hatched disc. Bands are clipped to the circle with no fill behind, so the
+   ground shows through the gaps and no rim forms at the edge — the construction
+   used in the reference set. Chords are solved analytically rather than with a
+   clipPath, which keeps the exported file free of defs. Period and weight are
+   proportional to the radius (measured at 0.14r, 50% duty) so discs of any size
+   carry the same texture. Round caps are inset by half the stroke width, or they
+   would bulge past the boundary and break the silhouette. */
+function hatchDisc(cx,cy,r,ang,color){
+  const gap=r*0.14, w=gap*0.5, inset=w/2;
+  const ca=Math.cos(ang),sa=Math.sin(ang),lines=[];
+  for(let t=-r+gap*0.5;t<r;t+=gap){
+    const half=Math.sqrt(Math.max(r*r-t*t,0))-inset;
+    if(half<=0)continue;
+    const mx=cx+(-sa)*t,my=cy+ca*t;
+    lines.push(`M${r1(mx-ca*half)} ${r1(my-sa*half)}L${r1(mx+ca*half)} ${r1(my+sa*half)}`);
+  }
+  push(`<path d="${lines.join("")}" stroke="${color}" stroke-width="${r1(w)}" fill="none" stroke-linecap="round"/>`);
+  return{x:cx,y:cy,r};
+}
+/* wavy mass filled to an edge; returns yAt(x) so dots can be tested against it */
+function wavyMass(g,W,H,yBase,amp,waveLen,phase,fill,dir){
+  const steps=Math.max(4,Math.round(W/waveLen));
+  const yAtStep=i=>yBase+Math.sin(phase+i*1.1)*amp;
+  let d=`M${r1(-W*0.1)} ${r1(yAtStep(0))}`;
+  for(let i=0;i<steps;i++){
+    const x0=-W*0.1+(W*1.2)*(i/steps),x1=-W*0.1+(W*1.2)*((i+1)/steps);
+    const y0=yAtStep(i),y1=yAtStep(i+1),xm=(x0+x1)/2;
+    d+=`C${r1(xm)} ${r1(y0)} ${r1(xm)} ${r1(y1)} ${r1(x1)} ${r1(y1)}`;
+  }
+  d+=dir==="down"?`L${r1(W*1.1)} ${r1(H*1.1)}L${r1(-W*0.1)} ${r1(H*1.1)}Z`
+                 :`L${r1(W*1.1)} ${r1(-H*0.1)}L${r1(-W*0.1)} ${r1(-H*0.1)}Z`;
+  push(`<path d="${d}" fill="${fill}"/>`);
+  const yAt=x=>{
+    const t=clamp((x+W*0.1)/(W*1.2),0,1)*steps;
+    const i=Math.floor(t),f=t-i;
+    return yAtStep(Math.min(i,steps))*(1-f)+yAtStep(Math.min(i+1,steps))*f;
+  };
+  return{yAt,contains:(x,y)=>dir==="down"?y>yAt(x):y<yAt(x)};
+}
+/* organic closed blob; returns its polygon for containment tests.
+   wob is a base intensity, not a fixed shape — every call re-rolls how many
+   lobes it has, how hard it wobbles, and whether it leans round or elongated,
+   so the same call site doesn't produce the same silhouette twice. Angular
+   jitter is capped at 0.32 of a vertex's even-spaced slot, which keeps
+   neighbouring vertices from ever swapping order (self-intersecting the
+   outline) no matter how it lands. */
+function blob(g,cx,cy,r,wob,fill){
+  const n=5+Math.floor(g()*7);
+  const w=wob*rnd(g,0.55,1.5);
+  const step=TAU/n, jitter=step*0.32;
+  const stretchAxis=g()*Math.PI, stretchAmt=rnd(g,0,0.22);
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const a=(i/n)*TAU+rnd(g,-jitter,jitter);
+    const stretch=1+stretchAmt*Math.cos(2*(a-stretchAxis));
+    const rr=r*stretch*(1+rnd(g,-w,w));
+    pts.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr]);
+  }
+  let d=`M${r1(pts[0][0])} ${r1(pts[0][1])}`;
+  for(let i=0;i<n;i++){
+    const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6];
+    const c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=`C${r1(c1[0])} ${r1(c1[1])} ${r1(c2[0])} ${r1(c2[1])} ${r1(p2[0])} ${r1(p2[1])}`;
+  }
+  push(`<path d="${d}Z" fill="${fill}"/>`);
+  return{contains:(x,y)=>{
+    let inside=false;
+    for(let i=0,j=n-1;i<n;j=i++){
+      const[xi,yi]=pts[i],[xj,yj]=pts[j];
+      if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)inside=!inside;
+    }
+    return inside;
+  }};
+}
+
+/* W/H rarely divide evenly by pitch, so a grid anchored at the top-left
+   leaves a bigger leftover sliver on the far side of each axis than on the
+   near side — dot() used to hide that by letting the overflow dot get
+   clipped by the canvas, which read as flush either way. Now that dot()
+   refuses to draw anything that would be cropped, that leftover has to be
+   split evenly instead, or the margin reads as lopsided (bigger on the
+   bottom/right). offX/offY shift the whole lattice by half the remainder so
+   the same amount of slack sits on both sides of each axis. Any composition
+   that walks its own pitch grid (matrix does, and any full-bleed one you add
+   should too) needs this same offset or the "even margins" fix only holds
+   for compositions that go through dotField(). */
+function gridPitch(W,H,pitch){
+  return{cols:Math.ceil(W/pitch)+2,rows:Math.ceil(H/pitch)+2,offX:(W%pitch)/2,offY:(H%pitch)/2};
+}
+/* ── dot field ──────────────────────────────────────────── */
+function dotField(g,cfg){
+  const{W,H,pitch,dotR,cover,P,pop,shape,qmul,noise,regions=[],excl=[]}=cfg;
+  const{cols,rows,offX,offY}=gridPitch(W,H,pitch);
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+    const x=c*pitch+pitch/2+offX,y=r*pitch+pitch/2+offY;
+    if(x>W+pitch||y>H+pitch)continue;
+    let p=shape(x,y);
+    if(p<=0)continue;
+    if(qmul)p*=qmul(x,y);
+    if(p<=0)continue;
+    if(noise)p*=0.45+0.85*noise(x/(pitch*7),y/(pitch*7));
+    if(g()>p*cover)continue;
+    let skip=false;
+    for(const e of excl){
+      if(Math.hypot(x-e.x,y-e.y)<e.r+dotR*1.4&&!(e.unless&&e.unless(x,y))){skip=true;break;}
+    }
+    if(skip)continue;
+    let tones=null;
+    for(const rg of regions){if(rg.test(x,y)){tones=rg.tones;break;}}
+    dot(x,y,dotR,fieldColor(g,P,pop,tones));
+  }
+}
+const shapeFull=()=>1;
+function shapeArc(cx,cy,rIn,rOut,feather){
+  return(x,y)=>{
+    const d=Math.hypot(x-cx,y-cy);
+    if(d<rIn-feather||d>rOut+feather)return 0;
+    return clamp(Math.min((d-(rIn-feather))/feather,((rOut+feather)-d)/feather,1),0,1);
+  };
+}
+function shapeRadial(cx,cy,r){return(x,y)=>clamp(1-Math.hypot(x-cx,y-cy)/r,0,1);}
+
+/* ── compositions ───────────────────────────────────────────
+   Negative space is treated as a compositional element, not as a
+   place to put type. "open" leaves large clear ground the way the
+   reference set does; "bleed" pushes the field to every edge. */
+const ARCH={
+
+  /* v1: dot field bounded by a wide arc band, radial sticks, thin arcs */
+  arcfield(g,S){
+    const{W,H,P,pitch,dotR,cover,pop,M,mc,open}=S;
+    const onLeft=g()<0.5;
+    const cx=onLeft?W*0.10:W*0.90, cy=H*1.16;
+    const rIn = open ? H*rnd(g,0.62,0.92) : H*rnd(g,0.16,0.30);
+    const rOut= rIn + (open?H*rnd(g,0.52,0.74):H*rnd(g,1.30,1.70));
+
+    dotField(g,{W,H,pitch,dotR,cover,P,pop,
+      shape:shapeArc(cx,cy,rIn,rOut,pitch*2.4),noise:noiseFn(g)});
+
+    if(M.arc){
+      arc(cx,cy,rOut+H*0.05,Math.PI*1.02,Math.PI*1.99,H*0.020,P.dark?GREY.d1:GREY.d3);
+      arc(cx,cy,rIn-H*0.025,Math.PI*1.05,Math.PI*1.95,H*0.0035,P.dark?GREY.d1:GREY.d3);
+    }
+    if(M.capsule){
+      const n=2+mc*2;
+      for(let i=0,t=0;i<n&&t<60;t++){
+        const a=Math.PI*(1.03+0.94*g());
+        const rr=rnd(g,rIn+H*0.04,rOut-H*0.04);
+        const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;
+        if(x<W*0.03||x>W*0.97||y<H*0.03||y>H*0.97)continue;
+        capsule(x,y,rnd(g,H*0.10,H*0.19),H*0.014,(a*180/Math.PI)-90,P.accent);i++;
+      }
+    }
+    if(M.hatch&&g()<0.6){
+      const a=Math.PI*rnd(g,1.15,1.85),rr=rnd(g,rIn+H*0.10,rOut-H*0.06);
+      const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;
+      if(x>W*0.08&&x<W*0.92&&y>H*0.08&&y<H*0.92)
+        hatchDisc(x,y,H*rnd(g,0.09,0.14),rnd(g,0.5,1.1),P.hatchFill);
+    }
+  },
+
+  /* v3: layered wavy masses from the bottom, striped disc, scatter */
+  tide(g,S){
+    const{W,H,P,pitch,dotR,cover,pop,M,mc,open}=S;
+    const dx=g()<0.5?W*0.62:W*0.38;
+    const regions=[],excl=[];
+
+    if(M.mass){
+      wavyMass(g,W,H,H*rnd(g,0.38,0.50),H*0.075,W*0.32,g()*6,P.massTones[0],"down");
+      wavyMass(g,W,H,H*rnd(g,0.56,0.66),H*0.068,W*0.27,g()*6,P.massTones[1],"down");
+    }
+    if(M.hatch){
+      const rr=H*rnd(g,0.24,0.31);
+      const d=hatchDisc(dx,H*rnd(g,0.34,0.44),rr,0,P.hatchFill);
+      excl.push({x:d.x,y:d.y,r:d.r*1.02});
+    }
+    if(M.mass){                                  // front colour mass rides over the disc, as in v3
+      const front=wavyMass(g,W,H,H*rnd(g,0.70,0.82),H*0.055,W*0.24,g()*6,P.massTones[2],"down");
+      regions.push({test:front.contains,tones:P.onMass});
+      excl.forEach(e=>{e.unless=front.contains;});
+    }
+
+    dotField(g,{W,H,pitch,dotR,cover:cover*(open?0.66:0.9),P,pop,
+      shape:shapeRadial(dx,H*0.58,open?W*0.50:W*0.95),
+      noise:noiseFn(g),regions,excl});
+
+    const blocked=(x,y,m)=>excl.some(e=>Math.hypot(x-e.x,y-e.y)<e.r+m);
+    if(M.capsule)for(let i=0,t=0;i<2+mc*2&&t<50;t++){
+      const x=rnd(g,W*0.06,W*0.94),y=rnd(g,H*0.20,H*0.94);
+      if(blocked(x,y,pitch*2))continue;
+      capsule(x,y,rnd(g,pitch*1.8,pitch*4),pitch*0.60,0,g()<0.5?P.accent:P.light);i++;
+    }
+    if(M.ring)for(let i=0,t=0;i<1+mc&&t<50;t++){
+      const x=rnd(g,W*0.06,W*0.94),y=rnd(g,H*0.18,H*0.92);
+      if(blocked(x,y,pitch*2))continue;
+      ring(x,y,rnd(g,pitch*0.8,pitch*1.8),pitch*0.28,g()<0.6?P.ring:P.accent);i++;
+    }
+  },
+
+  /* v2: one corner mass, loose scattered field, rings, hatch on the edge */
+  drift(g,S){
+    const{W,H,P,pitch,dotR,cover,pop,M,mc,open}=S;
+    const right=g()<0.5;
+    const fx=right?W*0.58:W*0.42;
+    const regions=[],excl=[];
+
+    // the disc is laid down first so the mass can ride over it, as in v2
+    let disc=null;
+    if(M.hatch){
+      // sit on the mass edge so roughly half stays visible, as in v2
+      const hx=right?W*rnd(g,0.40,0.50):W*rnd(g,0.50,0.60);
+      const hy=H*rnd(g,0.52,0.70);
+      disc=hatchDisc(hx,hy,H*rnd(g,0.13,0.19),Math.PI*0.25,P.hatchFill);
+    }
+    if(M.mass){
+      const b1=blob(g,right?W*1.04:-W*0.04,H*1.06,H*rnd(g,0.74,0.92),0.16,P.massTones[2]);
+      regions.push({test:b1.contains,tones:P.onMass});
+      const b2=blob(g,right?W*0.96:W*0.04,H*0.16,H*rnd(g,0.28,0.42),0.22,P.massTones[1]);
+      regions.push({test:b2.contains,tones:{base:P.fieldBase,accent:P.accent,light:P.light,pop:P.pop}});
+      // dots resume over the part of the disc the mass has covered
+      if(disc)excl.push({x:disc.x,y:disc.y,r:disc.r*1.04,unless:b1.contains});
+    }else if(disc)excl.push({x:disc.x,y:disc.y,r:disc.r*1.04});
+    dotField(g,{W,H,pitch,dotR,cover:cover*(open?0.70:0.95),P,pop,
+      shape:shapeRadial(fx,H*0.46,open?W*0.48:W*0.95),
+      noise:noiseFn(g),regions,excl});
+
+    if(M.ring){
+      ring(fx,H*rnd(g,0.42,0.56),H*rnd(g,0.24,0.32),pitch*0.11,P.ring);
+      for(let i=0;i<2+mc;i++)
+        ring(rnd(g,W*0.06,W*0.94),rnd(g,H*0.10,H*0.90),rnd(g,pitch*0.5,pitch*1.4),
+             pitch*0.26,g()<0.5?P.ring:P.accent);
+    }
+  },
+
+  /* v5: full-bleed field in horizontal bands of differing tone */
+  matrix(g,S){
+    const{W,H,P,pitch,dotR,cover,pop,M}=S;
+    const bands=2+Math.floor(g()*3);
+    const edges=[0];
+    for(let i=1;i<bands;i++)edges.push(H*(i/bands)+rnd(g,-H*0.035,H*0.035));
+    edges.push(H);
+    const nz=noiseFn(g);
+    const{cols,rows,offX,offY}=gridPitch(W,H,pitch);
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      const x=c*pitch+pitch/2+offX,y=r*pitch+pitch/2+offY;
+      if(x>W+pitch||y>H+pitch)continue;
+      let b=0;while(b<bands-1&&y>=edges[b+1])b++;
+      const T=b%2===1?{base:P.light,accent:P.band,light:P.ring,pop:P.accent}
+                     :{base:P.fieldBase,accent:P.accent,light:P.light,pop:P.pop};
+      const p=0.40+0.85*nz(x/(pitch*5),y/(pitch*5));
+      if(g()>p*cover)continue;
+      dot(x,y,dotR,fieldColor(g,P,pop,T));
+    }
+    // occasional — matrix is otherwise pure grid, so arcs stay rare and read as
+    // a deliberate accent, not a fixture. Same neutral grey treatment as arcfield's
+    // band arcs, so "arc" reads as one consistent structural mark across compositions.
+    if(M.arc&&g()<0.35){
+      const n=1+Math.floor(g()*2);
+      for(let i=0;i<n;i++){
+        const w=H*rnd(g,0.007,0.015),stroke=P.dark?GREY.d1:GREY.d3;
+        if(g()<0.3)ring(rnd(g,W*0.15,W*0.85),rnd(g,H*0.15,H*0.85),H*rnd(g,0.10,0.24),w,stroke);
+        else crossingArc(g,W,H,w,stroke,0.55,1.15,Math.PI*0.35,Math.PI*0.75);
+      }
+    }
+  },
+
+  /* v4: even full field, sparse accents, a couple of hatched discs */
+  constellation(g,S){
+    const{W,H,P,pitch,dotR,cover,pop,M,mc}=S;
+    const excl=[],discs=[];
+    if(M.hatch){
+      const n=1+Math.round(mc*0.5);
+      for(let i=0,t=0;i<n&&t<40;t++){
+        const x=rnd(g,W*0.12,W*0.90),y=rnd(g,H*0.14,H*0.88);
+        if(discs.some(d=>Math.hypot(d.x-x,d.y-y)<H*0.34))continue;
+        discs.push({x,y,r:H*rnd(g,0.11,0.17)});i++;
+      }
+    }
+    discs.forEach(d=>excl.push({x:d.x,y:d.y,r:d.r*1.05}));
+    dotField(g,{W,H,pitch,dotR,cover,P,pop,shape:shapeFull,noise:noiseFn(g),excl});
+    discs.forEach(d=>hatchDisc(d.x,d.y,d.r,Math.PI*rnd(g,0.15,0.35),P.accent));
+    if(M.ring)for(let i=0,t=0;i<1+mc&&t<40;t++){
+      const x=rnd(g,W*0.08,W*0.94),y=rnd(g,H*0.10,H*0.90);
+      if(discs.some(d=>Math.hypot(d.x-x,d.y-y)<d.r*1.5))continue;
+      ring(x,y,rnd(g,pitch*0.5,pitch*1.2),pitch*0.24,P.ring);i++;
+    }
+    if(M.arc&&g()<0.4){                        // sometimes, not every time — see matrix
+      const n=1+Math.floor(g()*2);
+      for(let i=0,t=0;i<n&&t<20;t++){
+        const w=H*rnd(g,0.006,0.013),stroke=P.dark?GREY.d1:GREY.d3;
+        if(g()<0.35){
+          const cx=rnd(g,W*0.20,W*0.80),cy=rnd(g,H*0.20,H*0.80),r=H*rnd(g,0.09,0.18);
+          if(discs.some(d=>Math.hypot(d.x-cx,d.y-cy)<d.r+r*0.3)){t++;continue;}
+          ring(cx,cy,r,w,stroke);i++;t++;
+        }else{
+          if(crossingArc(g,W,H,w,stroke,0.32,0.60,Math.PI*0.35,Math.PI*0.70))i++;
+          t++;
+        }
+      }
+    }
+  }
+};
+const ARCH_KEYS=Object.keys(ARCH);
+/* Display names for the picker. A new entry in ARCH plus a label here is all a
+   new composition needs — the dropdown is built from this at load. */
+const ARCH_LABEL={arcfield:"Arc field",tide:"Tide",drift:"Drift",matrix:"Matrix",constellation:"Constellation"};
+
+/* ── state ──────────────────────────────────────────────── */
+const S={W:1200,H:675,seed:"",open:"open",mono:false,bg:"dark",
+  fams:new Set(["Bay"]),motifs:{mass:true,hatch:true,ring:true,capsule:true,arc:true},
+  lock:{comp:false,pal:false,grain:false,mass:false},
+  last:null,setSeeds:[],history:[]};
+const HISTORY_MAX=10;
+
+function build(seed,mono){
+  const g=mulberry32(hashSeed(seed));
+  const W=S.W,H=S.H,prev=S.last;
+
+  const arch=(S.lock.comp&&prev)?prev.arch
+    :($("#arch").value==="auto"?pick(g,ARCH_KEYS):$("#arch").value);
+  const PAL=(S.lock.pal&&prev)?prev.PAL:makePalette(g,S.fams,S.bg);
+  const P=mono?PAL.m:PAL.c;
+
+  const scale=H/1000;
+  const pitch=(S.lock.grain&&prev)?prev.pitch:(+$("#grain").value)*scale;
+  const dotR =(S.lock.grain&&prev)?prev.dotR :pitch*(+$("#dotr").value/100)/2;
+  const cover=+$("#cover").value/100;
+  const pop  =+$("#pop").value;
+  const mc   =+$("#mcount").value;
+  const open =S.open==="open";
+
+  const M={...S.motifs};
+  if(S.lock.mass&&prev)M.mass=prev.M.mass;
+
+  E.length=0;
+  push(`<rect width="${W}" height="${H}" fill="${P.bg}"/>`);
+  ARCH[arch](g,{W,H,P,pitch,dotR,cover,pop,M,mc,open});
+
+  const svg=`<svg xmlns="${NS}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${E.join("")}</svg>`;
+  return{arch,PAL,P,fam:PAL.fam,pitch,dotR,svg,seed,M};
+}
+
+function render(seed){
+  const clean=(seed||"").replace(/[^a-zA-Z0-9]/g,"");
+  S.seed=clean||newSeed();
+  $("#seed").value=S.seed;
+  const out=build(S.seed,S.mono);
+  S.last=out;
+  const c=$("#canvas");
+  c.innerHTML=out.svg;
+  c.style.aspectRatio=`${S.W} / ${S.H}`;
+  const dots=(out.svg.match(/<circle/g)||[]).length;
+  $("#status").textContent=`${out.arch} · ${S.mono?"mono":out.fam} · ${dots} dots`;
+  pushHistory(S.seed);
+}
+/* every distinct seed the main canvas has shown gets a recall chip, newest
+   first, capped at HISTORY_MAX. Re-showing a seed that's already in the
+   list just moves it back to the front rather than duplicating it — this
+   runs on every render(), including reflow()'s same-seed re-renders from
+   slider tweaks, so a no-op reorder is the common case, not an edge case. */
+function pushHistory(seed){
+  const i=S.history.indexOf(seed);
+  if(i!==-1)S.history.splice(i,1);
+  S.history.unshift(seed);
+  if(S.history.length>HISTORY_MAX)S.history.length=HISTORY_MAX;
+  renderHistory();
+}
+function renderHistory(){
+  const box=$("#history");
+  box.classList.toggle("on",S.history.length>0);
+  box.innerHTML="";
+  if(!S.history.length)return;
+  const label=document.createElement("span");
+  label.className="hlabel";label.textContent="Recent";
+  box.appendChild(label);
+  S.history.forEach(sd=>{
+    const b=document.createElement("button");
+    b.textContent=sd;
+    b.setAttribute("aria-current",String(sd===S.seed));
+    b.title="Recall this seed";
+    b.onclick=()=>{render(sd);mark(sd);};
+    box.appendChild(b);
+  });
+}
+
+function cellFor(sd){
+  const out=build(sd,S.mono);
+  const b=document.createElement("button");
+  b.className="cell";
+  b.innerHTML=out.svg+`<b>${sd}</b>`;
+  b.onclick=()=>{render(sd);mark(sd);};
+  return b;
+}
+function renderSet(n){
+  S.setSeeds=[];
+  for(let i=0;i<n;i++)S.setSeeds.push(newSeed());
+  const grid=$("#grid");grid.innerHTML="";
+  S.setSeeds.forEach(sd=>grid.appendChild(cellFor(sd)));
+  $("#gallery").style.display="block";mark(S.seed);
+}
+/* The grid is built from the current settings, so it goes stale the moment any
+   control changes — most visibly on the mono toggle, where the canvas would turn
+   grey while the thumbnails stayed in colour. Rebuild it on the same seeds
+   whenever settings move. Debounced, because sliders fire continuously and each
+   pass redraws twelve full compositions. */
+let setTimer;
+function refreshSet(){
+  if(!S.setSeeds.length)return;
+  clearTimeout(setTimer);
+  setTimer=setTimeout(()=>{
+    const grid=$("#grid");grid.innerHTML="";
+    S.setSeeds.forEach(sd=>grid.appendChild(cellFor(sd)));
+    mark(S.seed);
+  },180);
+}
+/* every control change goes through here, so canvas and grid stay in step */
+function reflow(){render(S.seed);refreshSet();}
+const mark=sd=>Array.from($("#grid").children).forEach((c,i)=>c.setAttribute("aria-current",String(S.setSeeds[i]===sd)));
+
+/* ── UI ─────────────────────────────────────────────────── */
+const MOTIF_ICONS={
+  mass:'<svg viewBox="0 0 16 16"><path d="M1 9c3-4 5 1 7-2s4 2 7-1v9H1z" fill="currentColor"/></svg>',
+  hatch:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor"/><path d="M4 10l6-6M6 12l6-6" stroke="currentColor"/></svg>',
+  ring:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+  capsule:'<svg viewBox="0 0 16 16"><rect x="2" y="6" width="12" height="4" rx="2" fill="currentColor"/></svg>',
+  arc:'<svg viewBox="0 0 16 16"><path d="M2 13A9 9 0 0 1 14 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
+};
+const MOTIF_LABEL={mass:"Masses",hatch:"Hatch",ring:"Rings",capsule:"Capsules",arc:"Arcs"};
+function buildMotifs(){
+  const box=$("#motifs");box.innerHTML="";
+  Object.keys(S.motifs).forEach(k=>{
+    const b=document.createElement("button");
+    b.className="motif";b.setAttribute("aria-pressed",String(S.motifs[k]));
+    b.innerHTML=MOTIF_ICONS[k]+MOTIF_LABEL[k];
+    b.onclick=()=>{S.motifs[k]=!S.motifs[k];b.setAttribute("aria-pressed",String(S.motifs[k]));reflow();};
+    box.appendChild(b);
+  });
+}
+function buildFams(){
+  const box=$("#fams");box.innerHTML="";
+  FAMS.forEach(f=>{
+    const b=document.createElement("button");
+    b.className="fam";b.title=f;b.setAttribute("aria-pressed",String(S.fams.has(f)));
+    b.innerHTML=[1,3,5,7].map(i=>`<i style="background:${RAMPS[f][i]}"></i>`).join("");
+    b.onclick=()=>{S.fams.has(f)?S.fams.delete(f):S.fams.add(f);
+      b.setAttribute("aria-pressed",String(S.fams.has(f)));reflow();};
+    box.appendChild(b);
+  });
+}
+function buildArchList(){
+  const sel=$("#arch");
+  ARCH_KEYS.forEach(k=>{
+    const o=document.createElement("option");
+    o.value=k;o.textContent=ARCH_LABEL[k]||k;sel.appendChild(o);
+  });
+}
+buildArchList();buildMotifs();buildFams();
+
+const bind=(id,fmt)=>{const el=$("#"+id),out=$("#"+id+"V");
+  const s=()=>out.textContent=fmt(el.value);
+  el.addEventListener("input",()=>{s();reflow();});s();};
+bind("grain",v=>v+" px");
+bind("dotr",v=>(v/100).toFixed(2));
+bind("cover",v=>v+"%");
+bind("mcount",v=>["Minimal","Sparse","Balanced","Full","Dense"][v-1]);
+bind("pop",v=>["Muted","Low","Normal","High","Loud"][v-1]);
+
+$("#arch").onchange=()=>reflow();
+$$("[data-open]").forEach(b=>b.onclick=()=>{S.open=b.dataset.open;
+  $$("[data-open]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));reflow();});
+$$("[data-bg]").forEach(b=>b.onclick=()=>{S.bg=b.dataset.bg;
+  $$("[data-bg]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));reflow();});
+
+[["lkComp","comp"],["lkPal","pal"],["lkGrain","grain"],["lkMass","mass"]].forEach(([id,k])=>{
+  $("#"+id).onclick=()=>{S.lock[k]=!S.lock[k];$("#"+id).setAttribute("aria-pressed",String(S.lock[k]));};
+});
+
+$("#gen").onclick=()=>{render();mark(S.seed);};
+$("#genSet").onclick=()=>renderSet(12);
+$("#seed").onchange=()=>{render($("#seed").value.trim()||newSeed());mark(S.seed);};
+$$("[data-mono]").forEach(b=>b.onclick=()=>{S.mono=b.dataset.mono==="1";
+  $$("[data-mono]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));reflow();});
+document.addEventListener("keydown",e=>{
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;
+  if(e.code==="Space"){e.preventDefault();render();mark(S.seed);}
+  if(e.key==="Escape")$("#modal").classList.remove("on");
+});
+
+/* ── export ─────────────────────────────────────────────── */
+const fname=(mono)=>`og-studio_${S.last.arch}_${S.last.fam.replace(/\s+/g,"")}_${S.W}x${S.H}_${S.seed}${mono?"_mono":""}`;
+const withHeader=(svg,mono)=>`<?xml version="1.0" encoding="UTF-8"?>\n<!-- ${fname(mono)} -->\n${svg}\n`;
+
+function save(text,name,type){
+  try{
+    const u=URL.createObjectURL(new Blob([text],{type}));
+    const a=document.createElement("a");a.href=u;a.download=name;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(u),4000);return true;
+  }catch(e){return false;}
+}
+function savePNG(svg,name,scale){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const cv=document.createElement("canvas");
+      cv.width=S.W*scale;cv.height=S.H*scale;
+      cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+      cv.toBlob(b=>{
+        if(!b){toast("PNG export failed — use SVG instead.");return res(false);}
+        const u=URL.createObjectURL(b),a=document.createElement("a");
+        a.href=u;a.download=name;document.body.appendChild(a);a.click();
+        document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(u),4000);res(true);
+      },"image/png");
+    };
+    img.onerror=()=>{toast("PNG export failed — use SVG instead.");res(false);};
+    img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+  });
+}
+/* colour and mono are built from the same seed, so geometry is identical */
+const pairFor=sd=>({c:build(sd,false),m:build(sd,true)});
+
+$("#svgBtn").onclick=()=>{
+  if(save(withHeader(S.last.svg,S.mono),fname(S.mono)+".svg","image/svg+xml;charset=utf-8"))
+    toast("Saved "+fname(S.mono)+".svg");
+  else{openCode(withHeader(S.last.svg,S.mono));toast("Downloads are blocked here — copy the code instead.");}
+};
+$("#codeBtn").onclick=()=>openCode(withHeader(S.last.svg,S.mono));
+$("#png1").onclick=()=>savePNG(S.last.svg,fname(S.mono)+".png",1).then(ok=>ok&&toast("Saved PNG"));
+$("#png2").onclick=()=>savePNG(S.last.svg,fname(S.mono)+"@2x.png",2).then(ok=>ok&&toast("Saved PNG @2×"));
+
+$("#pairSvg").onclick=()=>{
+  const keep=S.last,p=pairFor(S.seed);
+  S.last=p.c;const okA=save(withHeader(p.c.svg,false),fname(false)+".svg","image/svg+xml;charset=utf-8");
+  S.last=p.m;const okB=save(withHeader(p.m.svg,true),fname(true)+".svg","image/svg+xml;charset=utf-8");
+  S.last=keep;
+  toast(okA&&okB?"Saved colour + mono SVG":"Downloads are blocked here — use Show SVG code.");
+};
+$("#pairPng").onclick=async()=>{
+  const keep=S.last,p=pairFor(S.seed);
+  S.last=p.c;await savePNG(p.c.svg,fname(false)+"@2x.png",2);
+  S.last=p.m;await savePNG(p.m.svg,fname(true)+"@2x.png",2);
+  S.last=keep;toast("Saved colour + mono PNG");
+};
+$("#zipAll").onclick=async()=>{
+  if(!S.setSeeds.length){toast("Generate a set of 12 first.");return;}
+  const keep=S.last,keepSeed=S.seed;
+  toast("Saving 24 files — allow multiple downloads if prompted.");
+  for(const sd of S.setSeeds){
+    S.seed=sd;const p=pairFor(sd);
+    S.last=p.c;save(withHeader(p.c.svg,false),fname(false)+".svg","image/svg+xml;charset=utf-8");
+    S.last=p.m;save(withHeader(p.m.svg,true),fname(true)+".svg","image/svg+xml;charset=utf-8");
+    await new Promise(r=>setTimeout(r,220));
+  }
+  S.last=keep;S.seed=keepSeed;$("#seed").value=keepSeed;
+  toast("Saved 12 pairs.");
+};
+
+function openCode(t){$("#mText").value=t;$("#modal").classList.add("on");}
+$("#mClose").onclick=()=>$("#modal").classList.remove("on");
+$("#modal").onclick=e=>{if(e.target===$("#modal"))$("#modal").classList.remove("on");};
+$("#mSel").onclick=()=>$("#mText").select();
+$("#mCopy").onclick=async()=>{try{await navigator.clipboard.writeText($("#mText").value);toast("Copied.");}
+  catch(e){$("#mText").select();try{document.execCommand("copy");toast("Copied.");}catch(_){toast("Select and copy manually.");}}};
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),2400);}
+
+render();
+</script>
+</body>
+</html>

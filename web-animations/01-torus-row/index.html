@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../media/placeholder.webp" type="image/webp">
+  <title>01 Torus Row · Loose Ends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shell/lab.css">
+  <!-- three.js 0.160.0 ships with the lab (vendor/three) so it works offline and behind firewalls; preload starts the fetch at once. The import map must come before any module preload, or Firefox ignores it. -->
+  <script type="importmap">
+    { "imports": { "three": "../vendor/three/three.module.min.js" } }
+  </script>
+  <link rel="modulepreload" href="../vendor/three/three.module.min.js">
+</head>
+<body class="theme-teal-ink">
+  <main class="stage" id="stage" aria-label="Torus row: scroll, drag or use the arrow keys to turn the rings"></main>
+  <noscript><p style="padding:80px 24px">The torus row needs JavaScript and WebGL.</p></noscript>
+  <script type="module" src="./module.js"></script>
+</body>
+</html>

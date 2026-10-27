@@ -1,0 +1,17 @@
+{
+  "ringTotal": 6,
+  "centreX": 0,
+  "centreY": 0,
+  "bleedScale": 1.25,
+  "physicsMode": "pull",
+  "follow": 1,
+  "centerShift": 90,
+  "outerWeight": 0.12,
+  "falloff": 2,
+  "lerpDamping": 0.08,
+  "springStiffness": 0.08,
+  "springFriction": 0.82,
+  "colorMode": "Orange to navy",
+  "ringColor": "#f86916",
+  "theme": "theme-orange-navy"
+}

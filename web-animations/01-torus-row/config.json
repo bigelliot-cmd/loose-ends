@@ -1,0 +1,23 @@
+{
+  "ringCount": 11,
+  "spacing": 0.65,
+  "ringRadius": 0.32,
+  "tubeThickness": 0.012,
+  "geometry": "torus",
+  "waveMode": "v-wave",
+  "phaseStep": 15,
+  "maxTilt": 25,
+  "rollAmount": 0.04,
+  "scrollSensitivity": 1,
+  "lerpDamping": 0.08,
+  "scrollDirection": "forward",
+  "cameraType": "perspective",
+  "fov": 40,
+  "fitMode": "row",
+  "fill": 1,
+  "cameraDistance": 1,
+  "shading": "lit",
+  "ringColor": "theme",
+  "wireframe": false,
+  "theme": "theme-teal-ink"
+}

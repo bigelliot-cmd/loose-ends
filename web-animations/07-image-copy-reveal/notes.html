@@ -1,0 +1,12 @@
+<!-- DRAFT (2026-10-25): first pass from the claud.md template. Elliot to rewrite, especially "When I'd use it". -->
+<h3>What it is</h3>
+<p>An image and a block of copy arrive one after the other: the image first, then the headline, subhead and body in a short stagger. Every timing in it is exposed in Parameters, so you can find the version that feels settled rather than busy.</p>
+<h3>Where it comes from</h3>
+<p>Nowhere in particular. It's the most common entrance on the web, built here on the browser's own <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/animate" target="_blank" rel="noopener">Web Animations API</a> instead of a library. Each piece gets one animation on a shared timeline, which is what makes the scrub bar and the scroll-driven mode possible.</p>
+<h3>Support and failure mode</h3>
+<p>Behaves the same in Firefox, Chrome and Safari's engine (tested October 2026). With JavaScript off, the page shows the finished layout. With reduced motion on, everything simply fades in quickly. The balanced headline wrapping is a nicety that older browsers ignore.</p>
+<h3>When I'd use it. When I wouldn't.</h3>
+<p>On a page that has one idea worth slowing down for, like a product hero or the opening of a case study. The pause before it starts matters more than the curve. I wouldn't put it on every section of a long page: by the third reveal it's a toll, not a moment, and anyone reading quickly ends up waiting on copy that was ready all along.</p>
+<h3>Implementation notes</h3>
+<p>Line-by-line splitting measures where the browser actually wrapped the text, so it waits for the web fonts before measuring. Delays set the order; nothing chains on callbacks. "When scrolled into view" holds the scroll for a moment once it fires, which is worth turning off anywhere people scroll to read.</p>
+<p class="credit">Elliot Olson · Code MIT</p>

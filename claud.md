@@ -101,11 +101,16 @@ site can't solve. Don't propose folding it in without that being reopened.
   control reaches the demo (shell writes `--speed`, `--amplitude`, etc. onto
   a wrapper element); a JS callback is the escape hatch for anything CSS
   can't express (discrete params, canvas/WebGL state).
-- **Viewer model:** dedicated full-bleed page per item, at
-  `/web-animations/<slug>/`. Only one demo runs at a time; full width for the
-  control rail and the writeup. The feed shows a static poster (screenshot)
-  per item, not a live running demo — keeps the feed cheap regardless of
-  how many effects it grows to.
+- **Viewer model (revised 2026-10-25, supersedes the page-with-rail layout):**
+  `/web-animations/` is the motion lab shell, not a scrolling article. Each
+  effect is a full-screen stage at `/web-animations/<NN-slug>/` with slim HUD
+  bars, a parameter drawer that pushes the stage aside, presets, a scrub
+  track and Present mode (H). The writeup lives in a Notes panel (N) that
+  also pushes the stage. Elliot tried the "demo beside a rail, writeup below"
+  page and rejected it ("worse ... the lab layout was so much more
+  successful") — don't rebuild it. The hub lists effects as cards, not live
+  demos. Controls are declared per effect (schema in module.js, defaults in
+  config.json) and the shell builds the drawer from them.
 - **Mar-dash moves into loose-ends**, at `/mar-dash/`.
 - **Visual style ties to elliotolson.com** (2026-07-31, confirmed against
   that site's actual compiled CSS, not guessed): typography is **Inter**

@@ -1,0 +1,20 @@
+{
+  "ringCount": 15,
+  "spacing": 0.46,
+  "ringRadius": 0.21,
+  "tubeThickness": 0.01,
+  "geometry": "torus",
+  "phaseDirection": 1,
+  "maxTilt": 25,
+  "scrollSensitivity": 1,
+  "lerpDamping": 0.08,
+  "cameraType": "perspective",
+  "fov": 40,
+  "fitMode": "row",
+  "fill": 1,
+  "cameraDistance": 1,
+  "shading": "lit",
+  "ringColor": "theme",
+  "wireframe": false,
+  "theme": "theme-teal-ink"
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../media/placeholder.webp" type="image/webp">
+  <title>04 Concentric Circles · Loose Ends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shell/lab.css">
+  <style>
+    /* The rings sit centred and oversized (bleed past every edge); the stage clips them. */
+    .stage.circles { cursor: default; overflow: hidden; display: grid; place-items: center; }
+    .stage.circles svg { width: var(--ring-size); height: var(--ring-size); flex: none; overflow: visible; transform: translate(var(--ring-x, 0px), var(--ring-y, 0px)); }
+  </style>
+</head>
+<body class="theme-orange-navy">
+  <main class="stage circles" id="stage" aria-label="Concentric circles that follow the cursor"></main>
+  <script type="module" src="./module.js"></script>
+</body>
+</html>

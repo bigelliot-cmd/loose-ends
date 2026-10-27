@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loose Ends — Web animations</title>
+  <meta name="description" content="Seven motion studies in one control shell, each with its parameters out on the table.">
+  <link rel="icon" href="media/placeholder.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shell/lab.css">
+  <style>
+    /* The hub scrolls like a page; the effect pages don't. */
+    body.hub { overflow: auto; }
+    .page { max-width: 1280px; margin: 0 auto; padding: calc(var(--hud-top) + 40px) 24px 64px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 10px; border: 1px solid var(--border-subtle); border-radius: 999px; background: rgba(255, 255, 255, 0.05); font-family: var(--font-mono); font-size: 11.5px; color: var(--ui-accent); text-transform: uppercase; letter-spacing: 0.08em; }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ui-accent); box-shadow: 0 0 6px var(--ui-accent); }
+    h1 { font-size: 38px; font-weight: 700; letter-spacing: -0.025em; margin: 20px 0 12px; }
+    .lede { color: var(--text-muted); font-size: 16px; max-width: 70ch; margin: 0 0 40px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    .card { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 24px; border-radius: 14px; border: 1px solid var(--border-subtle); background: rgba(18, 22, 34, 0.78); color: inherit; text-decoration: none; transition: transform 0.3s var(--ease-out), border-color 0.3s ease, background 0.3s ease; }
+    .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: transparent; transition: background 0.3s ease; }
+    a.card:hover { transform: translateY(-4px); border-color: rgba(248, 105, 22, 0.45); background: rgba(24, 30, 46, 0.92); }
+    a.card:hover::before { background: linear-gradient(90deg, #f86916, #3fbdac); }
+    .card.planned { opacity: 0.62; }
+    .top { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .top .tag { color: var(--ui-accent); }
+    .status { padding: 2px 8px; border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
+    .status.built { color: var(--ui-accent); background: rgba(248, 105, 22, 0.1); }
+    .card h2 { font-size: 21px; font-weight: 600; margin: 0; }
+    .card p { color: var(--text-muted); font-size: 13.5px; margin: 0 0 6px; flex: 1; }
+    .card .specs-grid { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .cta { margin-top: 8px; color: var(--ui-accent); font-weight: 600; font-size: 13.5px; }
+    .foot { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 11.5px; color: var(--text-dim); }
+    @media (prefers-reduced-motion: reduce) { .card { transition: none; } a.card:hover { transform: none; } }
+  </style>
+</head>
+<body class="hub theme-teal-ink">
+  <header class="hud-header">
+    <a class="crumb" href="/"><span class="dot"></span><span class="lab">Loose Ends</span><span class="sep">/</span><span class="here">Web animations</span></a>
+    <span></span>
+  </header>
+
+  <div class="page">
+    <span class="eyebrow"><span class="dot"></span>Loose Ends · Motion studies</span>
+    <h1>Web animations</h1>
+    <p class="lede">Seven motion studies in one control shell: WebGL ring arrays, a frame-accurate video scrubber, cursor-reactive rings and a two-stage reveal. Every parameter is out on the table: open Parameters (P), pick a preset (1–4), or press H to hide the controls and just watch.</p>
+
+    <main class="grid">
+      <a class="card" href="01-torus-row/">
+        <div class="top"><span class="tag">01 · Stationary Wave</span></div>
+        <h2>Torus Row</h2>
+        <p>Eleven rings in a row, turning out of phase: V-wave, conveyor, lockstep and counter-spin. They tip with scroll speed.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Engine</span><span class="spec-value">Three.js · damped virtual scroll</span>
+          <span class="spec-label">Rings</span><span class="spec-value">Torus · lit, matte or flat</span>
+          <span class="spec-label">Presets</span><span class="spec-value">V-wave · Conveyor · Lockstep · Counter-spin</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="02-torus-row-slide/">
+        <div class="top"><span class="tag">02 · Torus Slide</span></div>
+        <h2>Torus Row Slide</h2>
+        <p>Fifteen rings that run from face-on at the ends to edge-on in the middle; scroll slides the wave along.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Rest pose</span><span class="spec-value">0° · 90° · 180°</span>
+          <span class="spec-label">Rings</span><span class="spec-value">Torus · lit, matte or flat</span>
+          <span class="spec-label">Engine</span><span class="spec-value">Three.js · damped virtual scroll</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="03-video-scrub/">
+        <div class="top"><span class="tag">03 · Video Scrub</span></div>
+        <h2>Scroll Video Scrubber</h2>
+        <p>Scroll drives a video frame by frame, with inertia and looping. A built-in test pattern shows every frame number; drop any video of your own on it.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Engine</span><span class="spec-value">Virtual scroll · mid-frame seek</span>
+          <span class="spec-label">Readout</span><span class="spec-value">Frame wanted vs frame shown</span>
+          <span class="spec-label">Your video</span><span class="spec-value">Drag one in; it stays on your computer</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="04-concentric-circles/">
+        <div class="top"><span class="tag">04 · Circles</span></div>
+        <h2>Concentric Circles</h2>
+        <p>Concentric rings leaning toward the cursor, the core more than the rim. Pull, parallax or spring; 6 or 11 rings.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Engine</span><span class="spec-value">SVG · pull, parallax or spring</span>
+          <span class="spec-label">Colours</span><span class="spec-value">Blends between two Loose Ends colours</span>
+          <span class="spec-label">Place it</span><span class="spec-value">Centre X/Y and size</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="05-ring-carousel/">
+        <div class="top"><span class="tag">05 · Ring Carousel</span></div>
+        <h2>Torus Ring Carousel</h2>
+        <p>Twelve rings standing on a circle, edges pointing at the centre. Scroll or drag to turn it, flip it to face the viewer, roll the rings.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Engine</span><span class="spec-value">Three.js · damped virtual scroll</span>
+          <span class="spec-label">Rings</span><span class="spec-value">Torus · lit, matte or flat</span>
+          <span class="spec-label">Presets</span><span class="spec-value">Standing tall · Facing viewer · Three-quarter · Self-roll</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="06-ring-arc/">
+        <div class="top"><span class="tag">06 · Ring Arc</span></div>
+        <h2>Ring Arc</h2>
+        <p>The ring carousel with only its front half showing: the back half fades into the background, and the camera frames just the arc, so the rings run large.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Built on</span><span class="spec-value">Module 05 (same code, own settings)</span>
+          <span class="spec-label">Fade</span><span class="spec-value">Stage-colour fog from the centre line back</span>
+          <span class="spec-label">Controls</span><span class="spec-value">Fade start · fade length · frame front arc</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="card" href="07-image-copy-reveal/">
+        <div class="top"><span class="tag">07 · Image + Copy</span></div>
+        <h2>Image + Copy Reveal</h2>
+        <p>A two-stage entrance: the image, then the copy (or the other way, or together). Control how each arrives, from where, in what order and how fast; scrub the timeline frame by frame.</p>
+        <div class="specs-grid">
+          <span class="spec-label">Engine</span><span class="spec-value">Web Animations API · one shared timeline</span>
+          <span class="spec-label">Notes</span><span class="spec-value">When to use it, when not to (N)</span>
+          <span class="spec-label">Starts</span><span class="spec-value">On load · into view · scroll-scrubbed</span>
+        </div>
+        <span class="cta">Open →</span>
+      </a>
+    </main>
+
+    <p class="foot">Elliot Olson · Loose Ends · Code MIT · three.js MIT</p>
+  </div>
+</body>
+</html>

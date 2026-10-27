@@ -1,0 +1,10 @@
+{
+  "source": "pattern",
+  "fps": 60,
+  "patternFrames": 240,
+  "virtualHeight": 2500,
+  "lerpDamping": 0.12,
+  "wrap": true,
+  "fit": "contain",
+  "theme": "theme-teal-ink"
+}

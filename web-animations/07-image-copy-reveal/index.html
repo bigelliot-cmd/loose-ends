@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../media/placeholder.webp" type="image/webp">
+  <title>07 Image + Copy Reveal · Loose Ends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Inter + JetBrains Mono for the HUD; Inter Tight + Inter for the component, as on the rest of Loose Ends. -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shell/lab.css">
+  <style>
+    /* Loose Ends type and colour (/assets/tokens.css): Inter Tight headings, Inter body, near-black on white. */
+    :root {
+      --ds-font-display: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ds-font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .stage.reveal { cursor: default; overflow-y: auto; overflow-x: hidden; touch-action: auto; }
+    .surface-white { --surf: #FFFFFF; --ink: #111111; --body-ink: #525252; }
+    .surface-grey { --surf: #E6E6E6; --ink: #111111; --body-ink: #525252; }
+    .surface-navy { --surf: #12263F; --ink: #3FBDAC; --body-ink: #CFE5E6; }
+    .stage.reveal { background: var(--surf); }
+
+    /* "When scrolled into view" puts a screen of space above the component so you can scroll down to it. */
+    .runway { display: none; height: 100vh; align-items: flex-end; justify-content: center; padding-bottom: 48px; font-family: var(--font-mono); font-size: 12px; color: var(--ink); opacity: 0.55; }
+    .trigger-view .runway, .trigger-scroll .runway { display: flex; }
+    .runway.after { align-items: flex-start; padding: 48px 0 0; }
+
+    /* Content container: content widths per breakpoint. */
+    .comp { width: 100%; max-width: 1408px; margin: 0 auto; min-height: calc(100vh - var(--hud-top) - var(--hud-bottom)); padding: calc(var(--hud-top) + 48px) 10px calc(var(--hud-bottom) + 48px); display: grid; grid-template-columns: minmax(0, var(--img-share)) minmax(0, 1fr); gap: 64px; align-items: center; color: var(--ink); }
+    @media (min-width: 576px) { .comp { max-width: 516px; padding-inline: 0; } }
+    @media (min-width: 768px) { .comp { max-width: 696px; } }
+    @media (min-width: 992px) { .comp { max-width: 938px; } }
+    @media (min-width: 1200px) { .comp { max-width: 1116px; } }
+    @media (min-width: 1600px) { .comp { max-width: 1408px; } }
+    .trigger-view .comp, .trigger-scroll .comp { min-height: 100vh; }
+    .layout-image-right .media { order: 2; }
+    .layout-stacked .comp, .comp.narrow { grid-template-columns: 1fr; gap: 36px; justify-items: start; }
+    .layout-stacked .media, .comp.narrow .media { width: min(100%, calc(var(--img-share) * 1.4)); }
+
+    .media { width: 100%; aspect-ratio: 1; overflow: hidden; }
+    .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .shape-circle .media { border-radius: 50%; }
+    .shape-rounded .media { border-radius: 24px; }
+    .shape-square .media { border-radius: 0; }
+
+    .copy { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+    /* Headline: like the site's h1 (Inter Tight 900). */
+    .headline { margin: 0; font-family: var(--ds-font-display); font-weight: 900; letter-spacing: -0.01em; font-size: 34px; line-height: 42.5px; text-wrap: balance; }
+    /* Subheadline: Inter Tight 700. */
+    .subheadline { margin: 0; font-family: var(--ds-font-display); font-weight: 700; font-size: 18px; line-height: 22.5px; }
+    /* Body: Inter, the site's soft grey. */
+    .body { margin: 0; color: var(--body-ink); font-family: var(--ds-font-body); font-weight: 400; font-size: 18px; line-height: 27px; max-width: 60ch; }
+    @media (min-width: 992px) {
+      .headline { font-size: 56px; line-height: 70px; }
+      .subheadline { font-size: 24px; line-height: 30px; }
+    }
+    .copy .w, .copy .ln { display: inline-block; white-space: pre; }
+  </style>
+</head>
+<body>
+  <main class="stage reveal surface-white" id="stage" aria-label="Image and copy reveal">
+    <div class="runway" aria-hidden="true">Scroll down: the reveal starts when it comes into view ↓</div>
+    <section class="comp" id="comp">
+      <div class="media" id="media"><img id="img" src="../media/placeholder.webp" alt="Placeholder image"></div>
+      <div class="copy" id="copy">
+        <h2 class="headline" id="headline"></h2>
+        <p class="subheadline" id="subheadline"></p>
+        <p class="body" id="body"></p>
+      </div>
+    </section>
+    <div class="runway after" aria-hidden="true">↓ Next section: the page carries on here after the hold</div>
+  </main>
+  <div class="source-bar" style="position:fixed;right:20px;top:calc(var(--hud-top) + 16px);z-index:80;display:flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:rgba(14,18,28,.88);border:1px solid var(--border-hud);font-size:12px;color:var(--text-muted)">
+    <span>Image</span><strong id="imgName" style="color:var(--text-main);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Placeholder</strong>
+    <label class="action" for="imgFile">Choose image…</label>
+    <input id="imgFile" type="file" accept="image/*" hidden>
+    <button class="action" type="button" id="replay">Replay</button>
+  </div>
+  <script type="module" src="./module.js"></script>
+</body>
+</html>
